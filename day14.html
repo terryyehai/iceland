@@ -48,7 +48,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">☕ 10:00</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E8%88%8A%E6%B8%AF%E5%8D%80%20(Old%20Harbour)%20%E6%95%A3%E6%AD%A5%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('舊港區 (Old Harbour) 散步', '在港口邊悠閒漫步，這裡有老字號的海鮮湯店。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E8%88%8A%E6%B8%AF%E5%8D%80%20(Old%20Harbour)%20%E6%95%A3%E6%AD%A5%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">舊港區 (Old Harbour) 散步</div>
                 <div class="tl-desc">在港口邊悠閒漫步，這裡有老字號的海鮮湯店。</div>
@@ -64,7 +67,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">🏛️ 12:00</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E5%8F%83%E8%A7%80%E5%8D%9A%E7%89%A9%E9%A4%A8%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('參觀博物館', '可選擇前往 冰島國家博物館、極光中心 或 熱門的陰莖博物館參觀。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E5%8F%83%E8%A7%80%E5%8D%9A%E7%89%A9%E9%A4%A8%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">參觀博物館</div>
                 <div class="tl-desc">可選擇前往 冰島國家博物館、極光中心 或 熱門的陰莖博物館參觀。</div>
@@ -80,7 +86,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">🛍️ 15:00</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E6%89%93%E5%8C%85%E8%A1%8C%E6%9D%8E%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('打包行李', '享受在冰島最後的悠閒時光，整理準備明日的班機。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E6%89%93%E5%8C%85%E8%A1%8C%E6%9D%8E%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">打包行李</div>
                 <div class="tl-desc">享受在冰島最後的悠閒時光，整理準備明日的班機。</div>
@@ -139,6 +148,20 @@
 
         // Lucide Icons
         lucide.createIcons();
+
+        // 景點語音導覽
+        function speakText(title, desc) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // 停止先前的播放
+                var msg = new SpeechSynthesisUtterance("即將抵達" + title + "。 " + desc);
+                msg.lang = 'zh-TW';
+                msg.rate = 1.0; 
+                msg.pitch = 1.0;
+                window.speechSynthesis.speak(msg);
+            } else {
+                alert("您的瀏覽器不支援語音導覽功能。");
+            }
+        }
 
         // 滾動動畫
         document.addEventListener('DOMContentLoaded', () => {

@@ -48,7 +48,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">🚗 08:30</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E5%89%8D%E5%BE%80%E6%AD%90%E6%B4%B2%E8%B3%9E%E9%AF%A8%E4%B9%8B%E9%83%BD%20H%C3%BAsav%C3%ADk%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('前往歐洲賞鯨之都 Húsavík', '開往北方迷人的港口小鎮。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E5%89%8D%E5%BE%80%E6%AD%90%E6%B4%B2%E8%B3%9E%E9%AF%A8%E4%B9%8B%E9%83%BD%20H%C3%BAsav%C3%ADk%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">前往歐洲賞鯨之都 Húsavík</div>
                 <div class="tl-desc">開往北方迷人的港口小鎮。</div>
@@ -64,7 +67,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">🐋 10:00</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E4%B9%98%E8%88%B9%E8%B3%9E%E9%AF%A8%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('乘船賞鯨', '搭乘橡木船出海，8月是看座頭鯨的最佳季節。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E4%B9%98%E8%88%B9%E8%B3%9E%E9%AF%A8%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">乘船賞鯨</div>
                 <div class="tl-desc">搭乘橡木船出海，8月是看座頭鯨的最佳季節。</div>
@@ -80,7 +86,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">🚗 14:00</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E7%9C%BE%E7%A5%9E%E7%80%91%E5%B8%83%20Go%C3%B0afoss%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('眾神瀑布 Goðafoss', '環島路線上最經典的馬蹄形瀑布。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E7%9C%BE%E7%A5%9E%E7%80%91%E5%B8%83%20Go%C3%B0afoss%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">眾神瀑布 Goðafoss</div>
                 <div class="tl-desc">環島路線上最經典的馬蹄形瀑布。</div>
@@ -96,7 +105,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">🏨 16:30</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E6%8A%B5%E9%81%94%E9%98%BF%E5%85%8B%E9%9B%B7%E9%87%8C%20Akureyri%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('抵達阿克雷里 Akureyri', '冰島第二大城、北部首都。入住後可欣賞著名的大教堂與愛心紅綠燈。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E6%8A%B5%E9%81%94%E9%98%BF%E5%85%8B%E9%9B%B7%E9%87%8C%20Akureyri%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">抵達阿克雷里 Akureyri</div>
                 <div class="tl-desc">冰島第二大城、北部首都。入住後可欣賞著名的大教堂與愛心紅綠燈。</div>
@@ -155,6 +167,20 @@
 
         // Lucide Icons
         lucide.createIcons();
+
+        // 景點語音導覽
+        function speakText(title, desc) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // 停止先前的播放
+                var msg = new SpeechSynthesisUtterance("即將抵達" + title + "。 " + desc);
+                msg.lang = 'zh-TW';
+                msg.rate = 1.0; 
+                msg.pitch = 1.0;
+                window.speechSynthesis.speak(msg);
+            } else {
+                alert("您的瀏覽器不支援語音導覽功能。");
+            }
+        }
 
         // 滾動動畫
         document.addEventListener('DOMContentLoaded', () => {

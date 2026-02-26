@@ -48,7 +48,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">🛍️ 10:00</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E5%B8%82%E5%8D%80%E6%9C%80%E5%BE%8C%E6%8E%A1%E8%B2%B7%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('市區最後採買', '補齊紀念品。可購買 Omnom 巧克力或傳統的羊毛衣 (Lopapeysa)。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E5%B8%82%E5%8D%80%E6%9C%80%E5%BE%8C%E6%8E%A1%E8%B2%B7%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">市區最後採買</div>
                 <div class="tl-desc">補齊紀念品。可購買 Omnom 巧克力或傳統的羊毛衣 (Lopapeysa)。</div>
@@ -64,7 +67,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">🚗 13:00</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E5%89%8D%E5%BE%80%E8%97%8D%E6%B9%96%20Blue%20Lagoon%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('前往藍湖 Blue Lagoon', '驅車前往這座世界知名的地熱溫泉。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E5%89%8D%E5%BE%80%E8%97%8D%E6%B9%96%20Blue%20Lagoon%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">前往藍湖 Blue Lagoon</div>
                 <div class="tl-desc">驅車前往這座世界知名的地熱溫泉。</div>
@@ -80,7 +86,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">♨️ 14:00</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E8%97%8D%E6%B9%96%E6%B3%A1%E6%B9%AF%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('藍湖泡湯', '在夢幻的乳藍色泉水中放鬆，記得領取面罩泥與飲料。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E8%97%8D%E6%B9%96%E6%B3%A1%E6%B9%AF%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">藍湖泡湯</div>
                 <div class="tl-desc">在夢幻的乳藍色泉水中放鬆，記得領取面罩泥與飲料。</div>
@@ -96,7 +105,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">🍽️ 18:00</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E8%97%8D%E6%B9%96%20Lava%20%E9%A4%90%E5%BB%B3%20(%E6%88%96%E8%BF%94%E5%9B%9E%E5%B8%82%E5%8D%80)%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('藍湖 Lava 餐廳 (或返回市區)', '就在藍湖旁邊享受大餐，或返回市區度過在冰島的最後一晚。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E8%97%8D%E6%B9%96%20Lava%20%E9%A4%90%E5%BB%B3%20(%E6%88%96%E8%BF%94%E5%9B%9E%E5%B8%82%E5%8D%80)%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">藍湖 Lava 餐廳 (或返回市區)</div>
                 <div class="tl-desc">就在藍湖旁邊享受大餐，或返回市區度過在冰島的最後一晚。</div>
@@ -157,6 +169,20 @@
 
         // Lucide Icons
         lucide.createIcons();
+
+        // 景點語音導覽
+        function speakText(title, desc) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // 停止先前的播放
+                var msg = new SpeechSynthesisUtterance("即將抵達" + title + "。 " + desc);
+                msg.lang = 'zh-TW';
+                msg.rate = 1.0; 
+                msg.pitch = 1.0;
+                window.speechSynthesis.speak(msg);
+            } else {
+                alert("您的瀏覽器不支援語音導覽功能。");
+            }
+        }
 
         // 滾動動畫
         document.addEventListener('DOMContentLoaded', () => {

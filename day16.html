@@ -48,7 +48,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">🛬 15:45</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E6%8A%B5%E9%81%94%E9%A6%99%E6%B8%AF%E8%BD%89%E6%A9%9F%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('抵達香港轉機', '⚠️ 抵達香港 HKG，轉機時間僅 1 小時 45 分鐘，請留意轉機標示快速移動至下個登機門。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E6%8A%B5%E9%81%94%E9%A6%99%E6%B8%AF%E8%BD%89%E6%A9%9F%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">抵達香港轉機</div>
                 <div class="tl-desc">⚠️ 抵達香港 HKG，轉機時間僅 1 小時 45 分鐘，請留意轉機標示快速移動至下個登機門。</div>
@@ -64,7 +67,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">🛫 17:30</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E6%90%AD%E4%B9%98%20CI916%20%E9%A3%9B%E5%BE%80%E5%8F%B0%E5%8C%97%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('搭乘 CI916 飛往台北', '最後一段航程，搭乘中華航空回台。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E6%90%AD%E4%B9%98%20CI916%20%E9%A3%9B%E5%BE%80%E5%8F%B0%E5%8C%97%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">搭乘 CI916 飛往台北</div>
                 <div class="tl-desc">最後一段航程，搭乘中華航空回台。</div>
@@ -80,7 +86,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">🛬 19:25</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E6%8A%B5%E9%81%94%E5%8F%B0%E5%8C%97%20(TPE)%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('抵達台北 (TPE)', '順利抵達台灣，領取行李，結束這趟精彩的 16 天冰島大環島之旅！🎉')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E6%8A%B5%E9%81%94%E5%8F%B0%E5%8C%97%20(TPE)%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">抵達台北 (TPE)</div>
                 <div class="tl-desc">順利抵達台灣，領取行李，結束這趟精彩的 16 天冰島大環島之旅！🎉</div>
@@ -139,6 +148,20 @@
 
         // Lucide Icons
         lucide.createIcons();
+
+        // 景點語音導覽
+        function speakText(title, desc) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // 停止先前的播放
+                var msg = new SpeechSynthesisUtterance("即將抵達" + title + "。 " + desc);
+                msg.lang = 'zh-TW';
+                msg.rate = 1.0; 
+                msg.pitch = 1.0;
+                window.speechSynthesis.speak(msg);
+            } else {
+                alert("您的瀏覽器不支援語音導覽功能。");
+            }
+        }
 
         // 滾動動畫
         document.addEventListener('DOMContentLoaded', () => {

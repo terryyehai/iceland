@@ -48,7 +48,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">🚶 09:30</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E9%98%BF%E5%85%8B%E9%9B%B7%E9%87%8C%E5%B8%82%E5%8D%80%E6%BC%AB%E6%AD%A5%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('阿克雷里市區漫步', '逛逛植物園，品嚐冰島人氣第一名的 Brynja 冰淇淋。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E9%98%BF%E5%85%8B%E9%9B%B7%E9%87%8C%E5%B8%82%E5%8D%80%E6%BC%AB%E6%AD%A5%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">阿克雷里市區漫步</div>
                 <div class="tl-desc">逛逛植物園，品嚐冰島人氣第一名的 Brynja 冰淇淋。</div>
@@ -64,7 +67,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">🚗 12:00</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E5%95%9F%E7%A8%8B%E8%A5%BF%E8%A1%8C%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('啟程西行', '沿著一號公路往西北部移動。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E5%95%9F%E7%A8%8B%E8%A5%BF%E8%A1%8C%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">啟程西行</div>
                 <div class="tl-desc">沿著一號公路往西北部移動。</div>
@@ -80,7 +86,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">📸 14:00</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=Skagafj%C3%B6r%C3%B0ur%20%E5%86%B0%E5%B3%B6%E9%A6%AC%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('Skagafjörður 冰島馬', '沿著馬谷前進，途中可欣賞並拍攝路邊獨特可愛的冰島馬。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=Skagafj%C3%B6r%C3%B0ur%20%E5%86%B0%E5%B3%B6%E9%A6%AC%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">Skagafjörður 冰島馬</div>
                 <div class="tl-desc">沿著馬谷前進，途中可欣賞並拍攝路邊獨特可愛的冰島馬。</div>
@@ -96,7 +105,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">🏨 17:00</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E5%85%A5%E4%BD%8F%E8%A5%BF%E5%8C%97%E5%B0%8F%E9%8E%AE%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('入住西北小鎮', '在 Blönduós 或斯奈山前緣的城鎮休息。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E5%85%A5%E4%BD%8F%E8%A5%BF%E5%8C%97%E5%B0%8F%E9%8E%AE%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">入住西北小鎮</div>
                 <div class="tl-desc">在 Blönduós 或斯奈山前緣的城鎮休息。</div>
@@ -155,6 +167,20 @@
 
         // Lucide Icons
         lucide.createIcons();
+
+        // 景點語音導覽
+        function speakText(title, desc) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // 停止先前的播放
+                var msg = new SpeechSynthesisUtterance("即將抵達" + title + "。 " + desc);
+                msg.lang = 'zh-TW';
+                msg.rate = 1.0; 
+                msg.pitch = 1.0;
+                window.speechSynthesis.speak(msg);
+            } else {
+                alert("您的瀏覽器不支援語音導覽功能。");
+            }
+        }
 
         // 滾動動畫
         document.addEventListener('DOMContentLoaded', () => {

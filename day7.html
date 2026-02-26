@@ -48,7 +48,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">🚗 08:30</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=Stu%C3%B0lagil%20%E5%B3%BD%E8%B0%B7%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('Stuðlagil 峽谷', '冰島最壯觀的玄武岩柱峽谷，翠綠色的河水穿梭其中。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=Stu%C3%B0lagil%20%E5%B3%BD%E8%B0%B7%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">Stuðlagil 峽谷</div>
                 <div class="tl-desc">冰島最壯觀的玄武岩柱峽谷，翠綠色的河水穿梭其中。</div>
@@ -64,7 +67,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">🚗 12:00</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E9%BB%9B%E6%8F%90%E7%80%91%E5%B8%83%20Dettifoss%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('黛提瀑布 Dettifoss', '歐洲水流量最大、最強勁的瀑布 (普羅米修斯拍攝場景)。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E9%BB%9B%E6%8F%90%E7%80%91%E5%B8%83%20Dettifoss%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">黛提瀑布 Dettifoss</div>
                 <div class="tl-desc">歐洲水流量最大、最強勁的瀑布 (普羅米修斯拍攝場景)。</div>
@@ -80,7 +86,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">🚗 15:00</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E5%89%8D%E5%BE%80%E7%B1%B3%E6%B9%96%20M%C3%BDvatn%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('前往米湖 Mývatn', '逐漸駛入地熱景觀豐富的米湖區域。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E5%89%8D%E5%BE%80%E7%B1%B3%E6%B9%96%20M%C3%BDvatn%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">前往米湖 Mývatn</div>
                 <div class="tl-desc">逐漸駛入地熱景觀豐富的米湖區域。</div>
@@ -96,7 +105,10 @@
             <div class="tl-card">
                 <div class="tl-time-row">
                     <div class="tl-time">♨️ 17:00</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=%E7%B1%B3%E6%B9%96%E6%BA%AB%E6%B3%89%20Nature%20Baths%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    <div style="display:flex;gap:8px;">
+                        <button class="nav-btn play-btn" onclick="speakText('米湖溫泉 Nature Baths', '被稱為「北方的藍湖」，享受泡湯放鬆舒緩旅途疲勞。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E7%B1%B3%E6%B9%96%E6%BA%AB%E6%B3%89%20Nature%20Baths%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
+                    </div>
                 </div>
                 <div class="tl-title">米湖溫泉 Nature Baths</div>
                 <div class="tl-desc">被稱為「北方的藍湖」，享受泡湯放鬆舒緩旅途疲勞。</div>
@@ -155,6 +167,20 @@
 
         // Lucide Icons
         lucide.createIcons();
+
+        // 景點語音導覽
+        function speakText(title, desc) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // 停止先前的播放
+                var msg = new SpeechSynthesisUtterance("即將抵達" + title + "。 " + desc);
+                msg.lang = 'zh-TW';
+                msg.rate = 1.0; 
+                msg.pitch = 1.0;
+                window.speechSynthesis.speak(msg);
+            } else {
+                alert("您的瀏覽器不支援語音導覽功能。");
+            }
+        }
 
         // 滾動動畫
         document.addEventListener('DOMContentLoaded', () => {
