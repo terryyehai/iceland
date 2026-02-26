@@ -242,13 +242,20 @@ async function fetchFlights() {
 
                 if (json && json.data && json.data.length > 0) {
                     const flightData = json.data[0];
-                    dataMap[f] = flightData.flight_status;
+                    dataMap[f] = {
+                        status: flightData.flight_status,
+                        depGate: flightData.departure?.gate || '-',
+                        depTerminal: flightData.departure?.terminal || '-',
+                        arrGate: flightData.arrival?.gate || '-',
+                        arrTerminal: flightData.arrival?.terminal || '-',
+                        baggage: flightData.arrival?.baggage || '-'
+                    };
                 } else {
-                    dataMap[f] = 'unknown'; // 距離目前日期太遠可能會查無資料
+                    dataMap[f] = { status: 'unknown' };
                 }
             } catch (err) {
                 console.warn(`Fetch flight ${f} failed:`, err);
-                dataMap[f] = 'error';
+                dataMap[f] = { status: 'error' };
             }
         }
         localStorage.setItem(CACHE_KEY, JSON.stringify({ time: now, data: dataMap }));
@@ -257,16 +264,33 @@ async function fetchFlights() {
     // 更新 UI
     flights.forEach(f => {
         const el = document.getElementById(`f-${f}`);
-        if (el) {
-            const status = dataMap[f];
+        const exEl = document.getElementById(`f-${f}-ex`);
+        if (el && dataMap[f]) {
+            const fd = typeof dataMap[f] === 'string' ? { status: dataMap[f] } : dataMap[f];
+            const status = fd.status;
             if (status === 'scheduled') { el.innerHTML = '⏱️ 預定起飛'; el.className = 'fi-status st-sched'; }
             else if (status === 'active') { el.innerHTML = '✈️ 飛行中'; el.className = 'fi-status st-active'; }
             else if (status === 'landed') { el.innerHTML = '🛬 已抵達'; el.className = 'fi-status st-landed'; }
             else if (status === 'cancelled') { el.innerHTML = '❌ 已取消'; el.className = 'fi-status st-cancelled'; }
             else if (status === 'incident' || status === 'diverted') { el.innerHTML = '⚠️ 異常'; el.className = 'fi-status st-cancelled'; }
             else { el.innerHTML = '🔍 查無狀態'; el.className = 'fi-status st-unk'; }
+
+            if (exEl && fd.status && fd.status !== 'unknown' && fd.status !== 'error') {
+                const termStr = fd.depTerminal !== '-' ? `T${fd.depTerminal}` : '-';
+                exEl.innerHTML = `
+                    <div class="fi-extra-info">
+                        <span>出發: 航廈 ${termStr} / 登機台 ${fd.depGate}</span>
+                        <span>抵達: 行李轉盤 ${fd.baggage}</span>
+                    </div>
+                `;
+            }
         }
     });
+
+    // 重新觸發 Lucide icon 繪製
+    if (window.lucide) {
+        window.lucide.createIcons();
+    }
 }
 
 // ── 行李打包清單 ──

@@ -296,12 +296,18 @@ body {
 
 .flight-item {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
     padding: 6px 8px;
     background: rgba(255, 255, 255, 0.7);
     border-radius: 8px;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
+}
+
+.fi-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .fi-airline {
@@ -323,6 +329,26 @@ body {
     font-weight: 700;
     padding: 2px 6px;
     border-radius: 4px;
+}
+
+.fi-extra {
+    width: 100%;
+}
+
+.fi-extra-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: #0284c7;
+    padding-top: 4px;
+    margin-top: 4px;
+    border-top: 1px dashed rgba(2, 132, 199, 0.2);
+}
+
+.fi-extra-info span {
+    display: flex;
+    align-items: center;
+    gap: 2px;
 }
 
 .st-sched {
@@ -1127,6 +1153,11 @@ body.dark-mode .fi-airline {
 
 body.dark-mode .fi-route {
     color: #e0f2fe;
+}
+
+body.dark-mode .fi-extra-info {
+    color: #7dd3fc;
+    border-top-color: rgba(125, 211, 252, 0.2);
 }
 
 body.dark-mode .st-sched {
