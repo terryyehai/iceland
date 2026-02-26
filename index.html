@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>冰島自駕環島 2026｜16天15夜｜Ring Road</title>
+  <meta name="description" content="2026年冰島16天15夜環島自駕行程，一號公路 Ring Road，含黃金圈、冰河湖、米湖、斯奈山半島等精彩行程。" />
+  <meta name="theme-color" content="#2563eb" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" href="./puffin-icon-192.png" type="image/png" />
+  <link rel="apple-touch-icon" href="./puffin-icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== 英雄橫幅 ===== -->
+  <div class="hero">
+    <div class="hero-gradient"></div>
+    <div class="hero-content">
+      <div class="hero-logo">🇮🇸 ICELAND 2026</div>
+      <div class="hero-title">冰島自駕環島</div>
+      <div class="hero-date">2026年8月1日 – 8月16日</div>
+      <div class="hero-badges">
+        <span class="badge">🚗 自駕環島</span>
+        <span class="badge">🌋 Ring Road</span>
+        <span class="badge amber">16天15夜</span>
+      </div>
+      <div class="countdown-timer" id="countdown">
+        <span class="label">距離出發</span>
+        <span class="value" id="countdown-value">---</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 統計列 ===== -->
+  <div class="stats-bar">
+    <div class="stat-item"><div class="stat-icon"><i data-lucide="calendar-days"></i></div><span class="stat-value">16 天</span><span class="stat-label">行程天數</span></div>
+    <div class="stat-item"><div class="stat-icon"><i data-lucide="car"></i></div><span class="stat-value">~1,322 km</span><span class="stat-label">環島里程</span></div>
+    <div class="stat-item"><div class="stat-icon"><i data-lucide="map-pin"></i></div><span class="stat-value">40+</span><span class="stat-label">景點</span></div>
+    <div class="stat-item"><div class="stat-icon"><i data-lucide="bed"></i></div><span class="stat-value">15 晚</span><span class="stat-label">住宿</span></div>
+  </div>
+
+  <!-- ===== 天氣即時卡 ===== -->
+  <div class="section-header"><div class="section-dot"></div><h2><i data-lucide="cloud-sun"></i> 冰島即時天氣</h2></div>
+  <div class="weather-cards" id="weather-cards">
+    <div class="weather-card"><div class="wc-loading">載入中...</div></div>
+  </div>
+
+  <!-- ===== 每日行程卡片 ===== -->
+  <div class="section-header"><div class="section-dot"></div><h2><i data-lucide="route"></i> 每日行程</h2></div>
+  <div class="day-cards" id="day-cards"></div>
+
+  <!-- ===== 地圖總覽 ===== -->
+  <div class="section-header"><div class="section-dot"></div><h2><i data-lucide="map"></i> 環島路線</h2></div>
+  <div class="map-section"><div id="map-overview"></div></div>
+
+  <!-- ===== 旅遊提示 ===== -->
+  <div class="section-header"><div class="section-dot"></div><h2><i data-lucide="lightbulb"></i> 旅遊提示</h2></div>
+  <div class="tips-card">
+    <div class="tip-item"><span class="tip-icon"><i data-lucide="fuel"></i></span><span class="tip-text">冰島加油站間距可達 200 km 以上，看到加油站務必補油！建議備妥 N1 或 Orkan 信用卡加油。</span></div>
+    <div class="tip-item"><span class="tip-icon"><i data-lucide="cloud-rain"></i></span><span class="tip-text">8 月冰島天氣多變，隨時可能下雨。務必攜帶防水外套 (Gore-Tex) 與多層穿搭。</span></div>
+    <div class="tip-item"><span class="tip-icon"><i data-lucide="sun"></i></span><span class="tip-text">8 月日照仍長（約 17-20 小時），可充分利用白天時間但要注意休息。</span></div>
+    <div class="tip-item"><span class="tip-icon"><i data-lucide="wifi-off"></i></span><span class="tip-text">許多偏遠地區無手機訊號，建議離線下載離線地圖 (maps.me 或 Google Maps)。</span></div>
+    <div class="tip-item"><span class="tip-icon"><i data-lucide="banknote"></i></span><span class="tip-text">冰島物價極高，超市自煮可節省大量餐費。推薦 Bónus、Krónan 超市。</span></div>
+  </div>
+
+  <!-- ===== 底部導覽列 ===== -->
+  <nav class="bottom-nav">
+    <a class="nav-item active" href="#" onclick="scrollTo({top:0,behavior:'smooth'});return false"><div class="nav-icon"><i data-lucide="home"></i></div><span class="nav-label">首頁</span></a>
+    <a class="nav-item" href="#day-cards" onclick="document.getElementById('day-cards').scrollIntoView({behavior:'smooth'});return false"><div class="nav-icon"><i data-lucide="calendar-days"></i></div><span class="nav-label">行程</span></a>
+    <a class="nav-item" href="#map-overview" onclick="document.getElementById('map-overview').scrollIntoView({behavior:'smooth'});return false"><div class="nav-icon"><i data-lucide="map"></i></div><span class="nav-label">地圖</span></a>
+    <a class="nav-item" href="#" onclick="toggleSettings();return false"><div class="nav-icon"><i data-lucide="settings"></i></div><span class="nav-label">設定</span></a>
+  </nav>
+
+  <!-- ===== 設定面板 ===== -->
+  <div class="settings-overlay" id="settings-overlay" onclick="if(event.target===this)toggleSettings()">
+    <div class="settings-panel">
+      <div class="sp-header"><h3>⚙️ 設定</h3><button onclick="toggleSettings()" class="sp-close">✕</button></div>
+      <div class="sp-item"><span>🌙 深色模式</span><label class="switch"><input type="checkbox" id="dark-toggle" onchange="toggleDark()"><span class="slider"></span></label></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <title>Day 1 · 抵達雷克雅維克｜冰島自駕 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="day.css" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="icon" href="./puffin-icon-192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="./puffin-icon-192.png" />
+</head>
+<body>
+    <!-- 頂部導覽 -->
+    <div class="top">
+        <a class="back" href="index.html">←</a>
+        <div>
+            <div class="top-title">Day 1 · 抵達雷克雅維克</div>
+            <div class="top-sub">8月1日（週五）</div>
+        </div>
+    </div>
+
+    <!-- 日橫幅 -->
+    <div class="banner" style="background:linear-gradient(135deg, #2563eb, #2563ebdd)">
+        <div class="banner-num">01</div>
+        <div class="banner-info">
+            <div class="theme">抵達雷克雅維克 ✈️</div>
+            <div class="meta">8月1日（週五）・✈️ 抵達</div>
+        </div>
+    </div>
+
+    <!-- 行程時間軸 -->
+    <div class="sec-head">
+        <div class="dot" style="background:#2563eb"></div>
+        <h2><i data-lucide="map-pin"></i> 今日行程</h2>
+    </div>
+    <div class="timeline">
+
+        <div class="tl-item">
+            <div class="tl-line">
+                <div class="tl-dot"></div>
+                <div class="tl-bar"></div>
+            </div>
+            <div class="tl-card">
+                <div class="tl-time">✈️ 14:00</div>
+                <div class="tl-title">抵達凱夫拉維克國際機場 (KEF)</div>
+                <div class="tl-desc">從台灣經轉機抵達冰島凱夫拉維克機場。通過海關後前往租車櫃台取車。</div>
+                <div class="tl-tags"><span class="tl-tag">✈️ 抵達</span><span class="tl-tag">🚗 取車</span></div>
+            </div>
+        </div>
+
+        <div class="tl-item">
+            <div class="tl-line">
+                <div class="tl-dot"></div>
+                <div class="tl-bar"></div>
+            </div>
+            <div class="tl-card">
+                <div class="tl-time">🚗 15:30</div>
+                <div class="tl-title">取車與準備</div>
+                <div class="tl-desc">取得租用的 4WD 車輛，檢查車況、保險文件。在機場旁超市 Nettó 購買首日補給品。</div>
+                <div class="tl-tags"><span class="tl-tag">🛒 採買</span><span class="tl-tag">⛽ 加油</span></div>
+            </div>
+        </div>
+
+        <div class="tl-item">
+            <div class="tl-line">
+                <div class="tl-dot"></div>
+                <div class="tl-bar"></div>
+            </div>
+            <div class="tl-card">
+                <div class="tl-time">🚗 16:30 – 17:30</div>
+                <div class="tl-title">前往雷克雅維克市區</div>
+                <div class="tl-desc">從 KEF 機場沿 41 號公路前往首都雷克雅維克，車程約 45 分鐘。沿途可見冰島特有的苔蘚熔岩地貌。</div>
+                <div class="tl-tags"><span class="tl-tag">🛤️ 公路</span><span class="tl-tag">🌋 熔岩地</span></div>
+            </div>
+        </div>
+
+        <div class="tl-item">
+            <div class="tl-line">
+                <div class="tl-dot"></div>
+                <div class="tl-bar"></div>
+            </div>
+            <div class="tl-card">
+                <div class="tl-time">🏨 17:30</div>
+                <div class="tl-title">入住雷克雅維克住宿</div>
+                <div class="tl-desc">抵達市區住宿 Check-in，整理行李。初步熟悉周邊環境。</div>
+                <div class="tl-tags"><span class="tl-tag">🏨 Check-in</span></div>
+            </div>
+        </div>
+
+        <div class="tl-item">
+            <div class="tl-line">
+                <div class="tl-dot"></div>
+                
+            </div>
+            <div class="tl-card">
+                <div class="tl-time">🚶 18:30 – 21:00</div>
+                <div class="tl-title">市區漫步與晚餐</div>
+                <div class="tl-desc">漫步 Laugavegur 主街，感受首都氛圍。推薦品嘗冰島熱狗 Bæjarins Beztu Pylsur（柯林頓也吃過！），或在 Grillið 享用道地冰島料理。</div>
+                <div class="tl-tags"><span class="tl-tag">🌆 市區</span><span class="tl-tag">🌭 冰島熱狗</span><span class="tl-tag">🍽️ 晚餐</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 住宿資訊 -->
+    <div class="sec-head">
+        <div class="dot" style="background:#0D9488"></div>
+        <h2><i data-lucide="bed"></i> 今晚住宿</h2>
+    </div>
+    <div class="hotel-card">
+        <div class="icon">🏨</div>
+        <div>
+            <div class="name">雷克雅維克市區住宿</div>
+            <div class="desc">📍 Laugavegur 主街附近<br>🛏️ 第 1 晚（共住 2 晚）<br>💡 步行可達所有市區景點</div>
+        </div>
+    </div>
+
+    <!-- 地圖 -->
+    <div class="sec-head">
+        <div class="dot" style="background:#3B82F6"></div>
+        <h2><i data-lucide="map"></i> 景點地圖</h2>
+    </div>
+    <div id="map"></div>
+
+    <!-- 提示 -->
+    <div class="sec-head">
+        <div class="dot" style="background:#F87171"></div>
+        <h2><i data-lucide="lightbulb"></i> 今日提醒</h2>
+    </div>
+    <div class="tips">
+
+        <div class="tip"><span class="tip-ic"><i data-lucide="alert-circle"></i></span><span>抵達後先在機場換少量 ISK 現金（多數地方可刷卡）。</span></div>
+
+        <div class="tip"><span class="tip-ic"><i data-lucide="alert-circle"></i></span><span>冰島自來水可直接飲用，不需要買礦泉水。</span></div>
+
+        <div class="tip"><span class="tip-ic"><i data-lucide="alert-circle"></i></span><span>GPS 導航建議使用 Google Maps 離線地圖或 maps.me。</span></div>
+    </div>
+
+    <!-- 導航按鈕 -->
+    <div class="next-day"><a href="day2.html">Day 2 · 黃金圈 →</a></div>
+
+    <script>
+        // 地圖
+        try {
+            var map = L.map('map').setView([64.1466, -21.9426], 11);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution:'© OSM', maxZoom:18 }).addTo(map);
+            var spots = [{"name":"KEF 機場","lat":63.985,"lng":-22.606,"c":"#ef4444"},{"name":"Laugavegur 主街","lat":64.147,"lng":-21.933,"c":"#2563eb"},{"name":"Bæjarins Beztu","lat":64.148,"lng":-21.937,"c":"#f59e0b"}];
+            spots.forEach(function(s) {
+                L.circleMarker([s.lat, s.lng], { radius:7, fillColor:s.c, color:'#fff', weight:2, fillOpacity:.9 })
+                    .addTo(map).bindPopup('<b>' + s.name + '</b>');
+            });
+        } catch(e) { document.getElementById('map').innerHTML = '<div style="height:200px;display:flex;align-items:center;justify-content:center;background:#F3F4F6;border-radius:16px;color:#6B7280;">地圖載入中...</div>'; }
+
+        // 深色模式
+        if (localStorage.getItem('darkMode') === 'true') { document.body.classList.add('dark-mode'); }
+
+        // Lucide Icons
+        lucide.createIcons();
+
+        // 滾動動畫
+        document.addEventListener('DOMContentLoaded', () => {
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.tl-item, .hotel-card, .tips').forEach(el => { el.classList.add('fade-up'); obs.observe(el); });
+        });
+    </script>
+</body>
+</html>

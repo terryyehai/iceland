@@ -1,0 +1,375 @@
+/* ===== day.css — 每日行程頁面樣式 ===== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0
+}
+
+:root {
+    --amber: #F59E0B;
+    --navy: #1E3A5F;
+    --cream: #f0f4ff;
+    --card: #fff;
+    --sub: #6B7280;
+    --r: 16px;
+    --shadow: 0 4px 16px rgba(0, 0, 0, .08)
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--cream);
+    color: var(--navy);
+    max-width: 430px;
+    margin: 0 auto;
+    padding-bottom: 30px
+}
+
+/* 頂部列 */
+.top {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, .95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, .06)
+}
+
+.back {
+    text-decoration: none;
+    font-size: 20px;
+    color: var(--navy);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #F3F4F6
+}
+
+.top-title {
+    font-size: 16px;
+    font-weight: 700
+}
+
+.top-sub {
+    font-size: 11px;
+    color: var(--sub)
+}
+
+/* 日橫幅 */
+.banner {
+    position: relative;
+    height: 180px;
+    display: flex;
+    align-items: flex-end;
+    padding: 16px;
+    overflow: hidden
+}
+
+.banner * {
+    position: relative;
+    color: #fff
+}
+
+.banner-num {
+    font-size: 48px;
+    font-weight: 800;
+    opacity: .3;
+    position: absolute;
+    top: 12px;
+    right: 16px
+}
+
+.banner-info .theme {
+    font-size: 22px;
+    font-weight: 800;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, .2)
+}
+
+.banner-info .meta {
+    font-size: 12px;
+    opacity: .9;
+    margin-top: 4px
+}
+
+/* 區段 */
+.sec-head {
+    padding: 20px 16px 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px
+}
+
+.sec-head h2 {
+    font-size: 16px;
+    font-weight: 800
+}
+
+.sec-head h2 .lucide {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0
+}
+
+/* 時間軸 */
+.timeline {
+    padding: 0 16px
+}
+
+.tl-item {
+    display: flex;
+    gap: 12px;
+    position: relative;
+    padding-bottom: 20px
+}
+
+.tl-item:last-child {
+    padding-bottom: 0
+}
+
+.tl-line {
+    width: 28px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+.tl-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 3px solid var(--amber);
+    background: #fff;
+    flex-shrink: 0;
+    z-index: 1
+}
+
+.tl-bar {
+    flex: 1;
+    width: 2px;
+    background: #E5E7EB;
+    margin-top: 4px
+}
+
+.tl-card {
+    flex: 1;
+    background: var(--card);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 12px;
+    border-left: 3px solid var(--amber)
+}
+
+.tl-time {
+    font-size: 11px;
+    color: var(--amber);
+    font-weight: 700;
+    margin-bottom: 4px
+}
+
+.tl-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px
+}
+
+.tl-desc {
+    font-size: 12px;
+    color: var(--sub);
+    line-height: 1.6
+}
+
+.tl-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 6px
+}
+
+.tl-tag {
+    background: #FEF3C7;
+    color: #92400E;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 600
+}
+
+/* 住宿卡 */
+.hotel-card {
+    margin: 0 16px;
+    background: var(--card);
+    border-radius: var(--r);
+    box-shadow: var(--shadow);
+    padding: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    border-left: 4px solid #0D9488
+}
+
+.hotel-card .icon {
+    font-size: 32px
+}
+
+.hotel-card .name {
+    font-size: 14px;
+    font-weight: 700
+}
+
+.hotel-card .desc {
+    font-size: 11px;
+    color: var(--sub);
+    line-height: 1.5;
+    margin-top: 2px
+}
+
+/* 地圖 */
+#map {
+    width: calc(100% - 32px);
+    height: 200px;
+    margin: 0 16px;
+    border-radius: var(--r);
+    overflow: hidden;
+    box-shadow: var(--shadow)
+}
+
+/* 提示 */
+.tips {
+    margin: 0 16px;
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    border-radius: var(--r);
+    padding: 12px
+}
+
+.tip {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: #92400E;
+    line-height: 1.5
+}
+
+.tip:last-child {
+    margin-bottom: 0
+}
+
+.tip-ic {
+    font-size: 16px;
+    flex-shrink: 0
+}
+
+.tip-ic .lucide {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px
+}
+
+/* 下一天 / 首頁按鈕 */
+.next-day {
+    margin: 16px;
+    text-align: center
+}
+
+.next-day a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--amber);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 24px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, .3);
+    transition: transform .15s
+}
+
+.next-day a:active {
+    transform: scale(.96)
+}
+
+/* 深色模式 */
+body.dark-mode {
+    --cream: #1a1a2e;
+    --card: #16213e;
+    --navy: #e0e0e0;
+    --sub: #9ca3af;
+    --shadow: 0 4px 16px rgba(0, 0, 0, .3)
+}
+
+body.dark-mode .top {
+    background: rgba(22, 33, 62, .95);
+    border-bottom-color: rgba(255, 255, 255, .06)
+}
+
+body.dark-mode .back {
+    background: #1e2d4a;
+    color: #fff
+}
+
+body.dark-mode .tl-dot {
+    background: var(--card)
+}
+
+body.dark-mode .tl-bar {
+    background: #2d3a52
+}
+
+body.dark-mode .tl-tag {
+    background: #2d3a52;
+    color: #a78bfa
+}
+
+body.dark-mode .tips {
+    background: #1e2d4a;
+    border-color: #2d3a52
+}
+
+body.dark-mode .tip {
+    color: #d4a05a
+}
+
+/* 微動效 */
+.fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .6s cubic-bezier(.16, 1, .3, 1), transform .6s cubic-bezier(.16, 1, .3, 1);
+    will-change: opacity, transform
+}
+
+.fade-up.visible {
+    opacity: 1;
+    transform: translateY(0)
+}
+
+.tl-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .12) !important
+}
+
+body.dark-mode .tl-card:hover {
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .5) !important
+}
+
+.lucide {
+    width: 1em;
+    height: 1em;
+    vertical-align: middle
+}

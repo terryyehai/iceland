@@ -1,0 +1,6 @@
+node_modules/
+.DS_Store
+Thumbs.db
+generate-days.js
+# 雖然 generate-days.js 是工具，但通常部署到 Pages 只需要靜態網頁
+# 如果想要保留原始工具也可以不排除

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <title>Day 7 · 東峽灣至米湖｜冰島自駕 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="day.css" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="icon" href="./puffin-icon-192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="./puffin-icon-192.png" />
+</head>
+<body>
+    <!-- 頂部導覽 -->
+    <div class="top">
+        <a class="back" href="day6.html">←</a>
+        <div>
+            <div class="top-title">Day 7 · 東峽灣至米湖</div>
+            <div class="top-sub">8月7日（週四）</div>
+        </div>
+    </div>
+
+    <!-- 日橫幅 -->
+    <div class="banner" style="background:linear-gradient(135deg, #3b82f6, #3b82f6dd)">
+        <div class="banner-num">07</div>
+        <div class="banner-info">
+            <div class="theme">東峽灣至米湖 🚗</div>
+            <div class="meta">8月7日（週四）・🏔️ 峽谷</div>
+        </div>
+    </div>
+
+    <!-- 行程時間軸 -->
+    <div class="sec-head">
+        <div class="dot" style="background:#3b82f6"></div>
+        <h2><i data-lucide="map-pin"></i> 今日行程</h2>
+    </div>
+    <div class="timeline">
+
+        <div class="tl-item">
+            <div class="tl-line">
+                <div class="tl-dot"></div>
+                <div class="tl-bar"></div>
+            </div>
+            <div class="tl-card">
+                <div class="tl-time">🚗 08:30</div>
+                <div class="tl-title">前往 Stuðlagil 峽谷</div>
+                <div class="tl-desc">冰島最壯觀的玄武岩柱峽谷！需從主路繞道約 30 分鐘。沿溪谷步行約 40 分鐘抵達。</div>
+                <div class="tl-tags"><span class="tl-tag">🏔️ 峽谷</span><span class="tl-tag">📸 網紅景點</span></div>
+            </div>
+        </div>
+
+        <div class="tl-item">
+            <div class="tl-line">
+                <div class="tl-dot"></div>
+                <div class="tl-bar"></div>
+            </div>
+            <div class="tl-card">
+                <div class="tl-time">🚗 12:00</div>
+                <div class="tl-title">黛提瀑布 Dettifoss</div>
+                <div class="tl-desc">歐洲最強大的瀑布！水量驚人，每秒 500 立方公尺。從東岸 (862 號公路) 或西岸 (864 號公路) 都能觀賞。</div>
+                <div class="tl-tags"><span class="tl-tag">🌊 最強瀑布</span><span class="tl-tag">💨 水霧</span></div>
+            </div>
+        </div>
+
+        <div class="tl-item">
+            <div class="tl-line">
+                <div class="tl-dot"></div>
+                <div class="tl-bar"></div>
+            </div>
+            <div class="tl-card">
+                <div class="tl-time">🚶 13:30</div>
+                <div class="tl-title">Selfoss 瀑布</div>
+                <div class="tl-desc">Dettifoss 上游約 1 公里的另一座瀑布，寬廣而優雅，遊客較少。</div>
+                <div class="tl-tags"><span class="tl-tag">🌊 瀑布</span><span class="tl-tag">🥾 步行</span></div>
+            </div>
+        </div>
+
+        <div class="tl-item">
+            <div class="tl-line">
+                <div class="tl-dot"></div>
+                <div class="tl-bar"></div>
+            </div>
+            <div class="tl-card">
+                <div class="tl-time">🚗 15:00</div>
+                <div class="tl-title">前往米湖 Mývatn</div>
+                <div class="tl-desc">沿一號公路前往米湖區域。抵達後先在住宿放行李。</div>
+                <div class="tl-tags"><span class="tl-tag">🚗 自駕</span></div>
+            </div>
+        </div>
+
+        <div class="tl-item">
+            <div class="tl-line">
+                <div class="tl-dot"></div>
+                
+            </div>
+            <div class="tl-card">
+                <div class="tl-time">♨️ 17:00</div>
+                <div class="tl-title">米湖自然溫泉 Mývatn Nature Baths</div>
+                <div class="tl-desc">被稱為「北方的藍湖」，但人少很多！在蒸氣籠罩的溫泉中放鬆，欣賞米湖景色。</div>
+                <div class="tl-tags"><span class="tl-tag">♨️ 溫泉</span><span class="tl-tag">🌅 夕陽</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 住宿資訊 -->
+    <div class="sec-head">
+        <div class="dot" style="background:#0D9488"></div>
+        <h2><i data-lucide="bed"></i> 今晚住宿</h2>
+    </div>
+    <div class="hotel-card">
+        <div class="icon">🏨</div>
+        <div>
+            <div class="name">米湖周邊住宿</div>
+            <div class="desc">📍 Mývatn 湖畔<br>🛏️ 第 7 晚（共住 2 晚）<br>💡 地熱奇觀圍繞</div>
+        </div>
+    </div>
+
+    <!-- 地圖 -->
+    <div class="sec-head">
+        <div class="dot" style="background:#3B82F6"></div>
+        <h2><i data-lucide="map"></i> 景點地圖</h2>
+    </div>
+    <div id="map"></div>
+
+    <!-- 提示 -->
+    <div class="sec-head">
+        <div class="dot" style="background:#F87171"></div>
+        <h2><i data-lucide="lightbulb"></i> 今日提醒</h2>
+    </div>
+    <div class="tips">
+
+        <div class="tip"><span class="tip-ic"><i data-lucide="alert-circle"></i></span><span>Stuðlagil 峽谷步道沿河，穿防水鞋。</span></div>
+
+        <div class="tip"><span class="tip-ic"><i data-lucide="alert-circle"></i></span><span>Dettifoss 霧氣極大，相機防水準備。</span></div>
+
+        <div class="tip"><span class="tip-ic"><i data-lucide="alert-circle"></i></span><span>米湖區域的蚊蟲（midges）很多，帶頭巾或防蟲帽。</span></div>
+    </div>
+
+    <!-- 導航按鈕 -->
+    <div class="next-day"><a href="day8.html">Day 8 · 米湖地熱 →</a></div>
+
+    <script>
+        // 地圖
+        try {
+            var map = L.map('map').setView([65.5, -16.5], 8);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution:'© OSM', maxZoom:18 }).addTo(map);
+            var spots = [{"name":"Stuðlagil","lat":65.163,"lng":-15.325,"c":"#8b5cf6"},{"name":"Dettifoss","lat":65.815,"lng":-16.385,"c":"#2563eb"},{"name":"Mývatn Baths","lat":65.631,"lng":-16.847,"c":"#ef4444"}];
+            spots.forEach(function(s) {
+                L.circleMarker([s.lat, s.lng], { radius:7, fillColor:s.c, color:'#fff', weight:2, fillOpacity:.9 })
+                    .addTo(map).bindPopup('<b>' + s.name + '</b>');
+            });
+        } catch(e) { document.getElementById('map').innerHTML = '<div style="height:200px;display:flex;align-items:center;justify-content:center;background:#F3F4F6;border-radius:16px;color:#6B7280;">地圖載入中...</div>'; }
+
+        // 深色模式
+        if (localStorage.getItem('darkMode') === 'true') { document.body.classList.add('dark-mode'); }
+
+        // Lucide Icons
+        lucide.createIcons();
+
+        // 滾動動畫
+        document.addEventListener('DOMContentLoaded', () => {
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.tl-item, .hotel-card, .tips').forEach(el => { el.classList.add('fade-up'); obs.observe(el); });
+        });
+    </script>
+</body>
+</html>
