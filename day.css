@@ -97,6 +97,19 @@ body {
     margin-top: 4px
 }
 
+.day-hero-img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    background: #f3f4f6;
+}
+
+.day-hero-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 /* 區段 */
 .sec-head {
     padding: 20px 16px 8px;
@@ -382,6 +395,10 @@ body.dark-mode .nav-btn {
 
 body.dark-mode .nav-btn:active {
     background: #312e81;
+}
+
+body.dark-mode .day-hero-img {
+    background: #111827;
 }
 
 /* 微動效 */
