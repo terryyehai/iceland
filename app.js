@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initCountdown();
     initMap();
     fetchWeather();
+    fetchExchangeRate();
     initScrollAnim();
     initDarkMode();
     lucide.createIcons();
@@ -147,6 +148,44 @@ function getWeatherIcon(code) {
     if (code <= 82) return '🌦️';
     if (code <= 86) return '❄️';
     return '⛈️';
+}
+
+// ── 匯率 ──
+let currentIskToTwdRate = 0.23; // 預設參考匯率
+
+async function fetchExchangeRate() {
+    try {
+        // 使用 Frankfurter API (免費，無須註冊) 抓取 ISK 對 TWD 匯率 (可能需透過 EUR 中轉或直接抓，這裡示範透過 API)
+        // Frankfurter 不一定直接支援 ISK->TWD，若無則改用備用公共 API 或寫死接近即時的參考值
+        // 為了確保前端穩定性且無需 API key，這裡呼叫一個通用的開放 API (例如 open.er-api.com)
+        const res = await fetch('https://open.er-api.com/v6/latest/ISK');
+        const data = await res.json();
+        if (data && data.rates && data.rates.TWD) {
+            currentIskToTwdRate = data.rates.TWD;
+            document.getElementById('isk-to-twd-rate').textContent = currentIskToTwdRate.toFixed(4);
+            calcExchange();
+        } else {
+            throw new Error("No TWD rate found");
+        }
+    } catch (e) {
+        console.warn("Fetch exchange rate failed, using fallback:", e);
+        // Fallback 近期參考匯率 (約為 1 ISK = 0.235 TWD)
+        currentIskToTwdRate = 0.235;
+        document.getElementById('isk-to-twd-rate').textContent = currentIskToTwdRate.toFixed(4);
+        calcExchange();
+    }
+}
+
+function calcExchange() {
+    const iskInput = document.getElementById('isk-input');
+    const resultEl = document.getElementById('twd-result');
+    if (!iskInput || !resultEl) return;
+
+    let iskVal = parseFloat(iskInput.value) || 0;
+    let twdVal = iskVal * currentIskToTwdRate;
+
+    // 顯示結果，取整數
+    resultEl.textContent = Math.round(twdVal).toLocaleString();
 }
 
 // ── 滾動動畫 ──
