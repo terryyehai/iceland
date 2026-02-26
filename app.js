@@ -222,6 +222,7 @@ async function fetchAurora() {
 
 // ── 行李打包清單 ──
 const PACKING_ITEMS = [
+    { id: 'p_doc', label: '護照 (>6個月效期) & 機票行程單' },
     { id: 'p_jacket', label: '防水防風外套 (Gore-Tex)' },
     { id: 'p_base', label: '保暖底層衣 (發熱衣/羊毛)' },
     { id: 'p_shoes', label: '防水登山鞋 (冰川健行必備)' },

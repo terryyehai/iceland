@@ -281,6 +281,33 @@ body {
     margin-bottom: 12px
 }
 
+/* 航班卡片 */
+.flight-card {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd
+}
+
+.flight-details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px
+}
+
+.flight-route {
+    font-weight: 700;
+    color: #0369a1
+}
+
+.flight-note {
+    color: #0c4a6e
+}
+
+.flight-note.text-red {
+    color: #e11d48;
+    font-weight: 600
+}
+
 .info-card {
     background: var(--card-bg);
     border-radius: 20px;
@@ -1028,6 +1055,23 @@ body.dark-mode .pack-item.checked .pack-label {
 
 body.dark-mode .progress-bar {
     background: #1e2d4a
+}
+
+body.dark-mode .flight-card {
+    background: #0c4a6e;
+    border-color: #0369a1
+}
+
+body.dark-mode .flight-route {
+    color: #bae6fd
+}
+
+body.dark-mode .flight-note {
+    color: #e0f2fe
+}
+
+body.dark-mode .flight-note.text-red {
+    color: #fca5a5
 }
 
 body.dark-mode .settings-panel {
