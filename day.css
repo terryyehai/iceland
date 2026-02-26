@@ -173,11 +173,40 @@ body {
     border-left: 3px solid var(--amber)
 }
 
+.tl-time-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
 .tl-time {
     font-size: 11px;
     color: var(--amber);
     font-weight: 700;
-    margin-bottom: 4px
+}
+
+.nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #e0e7ff;
+    color: #4f46e5;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    transition: background 0.2s;
+}
+
+.nav-btn .lucide {
+    width: 12px;
+    height: 12px;
+}
+
+.nav-btn:active {
+    background: #c7d2fe;
 }
 
 .tl-title {
@@ -344,6 +373,15 @@ body.dark-mode .tips {
 
 body.dark-mode .tip {
     color: #d4a05a
+}
+
+body.dark-mode .nav-btn {
+    background: #3730a3;
+    color: #e0e7ff;
+}
+
+body.dark-mode .nav-btn:active {
+    background: #312e81;
 }
 
 /* 微動效 */
