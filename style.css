@@ -294,9 +294,64 @@ body {
     font-size: 12px
 }
 
-.flight-route {
+.flight-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+    margin-bottom: 2px;
+}
+
+.fi-airline {
+    font-weight: 800;
+    color: #0369a1;
+    width: 45px;
+}
+
+.fi-route {
+    font-family: monospace;
+    font-size: 11px;
+    flex: 1;
+    text-align: left;
+    color: #0c4a6e;
+}
+
+.fi-status {
+    font-size: 10px;
     font-weight: 700;
-    color: #0369a1
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.st-sched {
+    background: #e0e7ff;
+    color: #3730a3;
+}
+
+.st-active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.st-landed {
+    background: #ffedd5;
+    color: #9a3412;
+}
+
+.st-cancelled {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.st-unk {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+.mt-2 {
+    margin-top: 8px;
 }
 
 .flight-note {
@@ -1062,8 +1117,41 @@ body.dark-mode .flight-card {
     border-color: #0369a1
 }
 
-body.dark-mode .flight-route {
-    color: #bae6fd
+body.dark-mode .flight-item {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .fi-airline {
+    color: #bae6fd;
+}
+
+body.dark-mode .fi-route {
+    color: #e0f2fe;
+}
+
+body.dark-mode .st-sched {
+    background: #3730a3;
+    color: #e0e7ff;
+}
+
+body.dark-mode .st-active {
+    background: #166534;
+    color: #dcfce7;
+}
+
+body.dark-mode .st-landed {
+    background: #9a3412;
+    color: #ffedd5;
+}
+
+body.dark-mode .st-cancelled {
+    background: #991b1b;
+    color: #fee2e2;
+}
+
+body.dark-mode .st-unk {
+    background: #374151;
+    color: #d1d5db;
 }
 
 body.dark-mode .flight-note {

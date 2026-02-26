@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchWeather();
     fetchExchangeRate();
     fetchAurora();
+    fetchFlights();
     initPackingList();
     initScrollAnim();
     initDarkMode();
@@ -218,6 +219,54 @@ async function fetchAurora() {
         console.warn("Fetch Aurora API failed:", e);
         document.getElementById('aurora-kp').textContent = '--';
     }
+}
+
+// ── 航班追蹤 (Aviationstack) ──
+async function fetchFlights() {
+    const flights = ['CI923', 'LH797', 'LH844', 'LH845', 'LH796', 'CI916'];
+    const apiKey = '4e6b9230157d7292916389ff7e13289f';
+    const CACHE_KEY = 'iceland_flights_data';
+    const CACHE_TIME = 30 * 60 * 1000; // 30 分鐘快取，節省免費額度
+
+    const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || '{"time":0, "data":{}}');
+    const now = Date.now();
+    let dataMap = cached.data;
+
+    if (now - cached.time > CACHE_TIME) {
+        dataMap = {};
+        for (let f of flights) {
+            try {
+                const url = `https://api.aviationstack.com/v1/flights?access_key=${apiKey}&flight_iata=${f}`;
+                const res = await fetch(url);
+                const json = await res.json();
+
+                if (json && json.data && json.data.length > 0) {
+                    const flightData = json.data[0];
+                    dataMap[f] = flightData.flight_status;
+                } else {
+                    dataMap[f] = 'unknown'; // 距離目前日期太遠可能會查無資料
+                }
+            } catch (err) {
+                console.warn(`Fetch flight ${f} failed:`, err);
+                dataMap[f] = 'error';
+            }
+        }
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ time: now, data: dataMap }));
+    }
+
+    // 更新 UI
+    flights.forEach(f => {
+        const el = document.getElementById(`f-${f}`);
+        if (el) {
+            const status = dataMap[f];
+            if (status === 'scheduled') { el.innerHTML = '⏱️ 預定起飛'; el.className = 'fi-status st-sched'; }
+            else if (status === 'active') { el.innerHTML = '✈️ 飛行中'; el.className = 'fi-status st-active'; }
+            else if (status === 'landed') { el.innerHTML = '🛬 已抵達'; el.className = 'fi-status st-landed'; }
+            else if (status === 'cancelled') { el.innerHTML = '❌ 已取消'; el.className = 'fi-status st-cancelled'; }
+            else if (status === 'incident' || status === 'diverted') { el.innerHTML = '⚠️ 異常'; el.className = 'fi-status st-cancelled'; }
+            else { el.innerHTML = '🔍 查無狀態'; el.className = 'fi-status st-unk'; }
+        }
+    });
 }
 
 // ── 行李打包清單 ──
