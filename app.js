@@ -57,9 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchExchangeRate();
     fetchAurora();
     fetchFlights();
-    initPackingList();
     initScrollAnim();
     initDarkMode();
+    initLargeText();
+    initVoiceSettings();
     lucide.createIcons();
     registerSW();
 });
@@ -406,4 +407,133 @@ function registerSW() {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW:', err));
     }
+}
+
+// ── 設定：大字體模式 ──
+function initLargeText() {
+    const isLarge = localStorage.getItem('largeText') === 'true';
+    const toggle = document.getElementById('large-text-toggle');
+    if (toggle) toggle.checked = isLarge;
+    if (isLarge) document.body.classList.add('large-text');
+}
+
+function toggleLargeText() {
+    const toggle = document.getElementById('large-text-toggle');
+    if (!toggle) return;
+    const isLarge = toggle.checked;
+    localStorage.setItem('largeText', isLarge);
+    if (isLarge) document.body.classList.add('large-text');
+    else document.body.classList.remove('large-text');
+}
+
+// ── 設定：語音設定 ──
+function initVoiceSettings() {
+    const rate = localStorage.getItem('voiceRate') || '1.0';
+    const voiceInput = document.getElementById('voice-rate');
+    const voiceVal = document.getElementById('voice-rate-val');
+    if (voiceInput) voiceInput.value = rate;
+    if (voiceVal) voiceVal.textContent = parseFloat(rate).toFixed(1) + 'x';
+}
+
+function saveVoiceSettings() {
+    const voiceInput = document.getElementById('voice-rate');
+    const voiceVal = document.getElementById('voice-rate-val');
+    if (!voiceInput) return;
+    localStorage.setItem('voiceRate', voiceInput.value);
+    if (voiceVal) voiceVal.textContent = parseFloat(voiceInput.value).toFixed(1) + 'x';
+}
+
+// ── 設定：測試推播 ──
+function testNotification() {
+    if (!("Notification" in window)) {
+        alert("您的瀏覽器不支援通知功能。");
+        return;
+    }
+    if (Notification.permission === "granted") {
+        showPush();
+    } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then(permission => {
+            if (permission === "granted") showPush();
+        });
+    } else {
+        alert("您已封鎖通知。如果是在 iOS Safari，請將此網站『加入主畫面』後再試一次，或至系統設定開啟通知。");
+    }
+}
+
+function showPush() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then(registration => {
+            registration.showNotification('冰島自駕 PWA 提醒', {
+                body: '早安！即將開始今天的行程，記得檢查必備行李喔！',
+                icon: './puffin-icon-192.png',
+                vibrate: [200, 100, 200]
+            });
+        }).catch(err => {
+            new Notification('冰島自駕 PWA 提醒', { body: '早安！' });
+        });
+    } else {
+        new Notification('冰島自駕 PWA 提醒', { body: '早安！' });
+    }
+}
+
+// ── 設定：清除快取與重置 ──
+function resetAppData() {
+    if (!confirm('🚨 這會清除所有的行李打包紀錄、深色模式設定與快取，並載入最新版的 App。\n\n確定嗎？')) return;
+
+    // 1. 清除 LocalStorage
+    localStorage.clear();
+
+    // 2. 解除安裝 Service Worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+            for (let registration of registrations) {
+                registration.unregister();
+            }
+        }).then(() => {
+            // 3. 清除 Cache API
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    Promise.all(names.map(name => caches.delete(name))).then(() => {
+                        window.location.reload(true);
+                    });
+                });
+            } else {
+                window.location.reload(true);
+            }
+        });
+    } else {
+        window.location.reload(true);
+    }
+}
+
+// ── 設定：行事曆匯出 (.ics) ──
+function exportToICS() {
+    let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Iceland PWA//TW\n";
+
+    DAYS.forEach(d => {
+        // 從 '8/1（五）' 中萃取出日期
+        const match = d.date.match(/(\d+)\/(\d+)/);
+        if (match) {
+            let m = String(match[1]).padStart(2, '0');
+            let dd = String(match[2]).padStart(2, '0');
+            let dateStr = `2026${m}${dd}`;
+
+            icsContent += "BEGIN:VEVENT\n";
+            icsContent += `DTSTART;VALUE=DATE:${dateStr}\n`;
+            icsContent += `DTEND;VALUE=DATE:${dateStr}\n`;
+            icsContent += `SUMMARY:[冰島 Day ${d.day}] ${d.theme}\n`;
+            let desc = d.tags.join(', ');
+            icsContent += `DESCRIPTION:${desc}\n`;
+            icsContent += "END:VEVENT\n";
+        }
+    });
+    icsContent += "END:VCALENDAR";
+
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = "Iceland_2026_Itinerary.ics";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }

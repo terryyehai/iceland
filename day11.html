@@ -205,8 +205,9 @@
             });
         } catch(e) { document.getElementById('map').innerHTML = '<div style="height:200px;display:flex;align-items:center;justify-content:center;background:#F3F4F6;border-radius:16px;color:#6B7280;">地圖載入中...</div>'; }
 
-        // 深色模式
+        // 大字體與深色模式
         if (localStorage.getItem('darkMode') === 'true') { document.body.classList.add('dark-mode'); }
+        if (localStorage.getItem('largeText') === 'true') { document.body.classList.add('large-text'); }
 
         // Lucide Icons
         lucide.createIcons();
@@ -217,7 +218,7 @@
                 window.speechSynthesis.cancel(); // 停止先前的播放
                 var msg = new SpeechSynthesisUtterance("即將抵達" + title + "。 " + desc);
                 msg.lang = 'zh-TW';
-                msg.rate = 1.0; 
+                msg.rate = parseFloat(localStorage.getItem('voiceRate') || '1.0'); 
                 msg.pitch = 1.0;
                 window.speechSynthesis.speak(msg);
             } else {

@@ -289,8 +289,36 @@
       <div class="sp-header">
         <h3>⚙️ 設定</h3><button onclick="toggleSettings()" class="sp-close">✕</button>
       </div>
-      <div class="sp-item"><span>🌙 深色模式</span><label class="switch"><input type="checkbox" id="dark-toggle"
-            onchange="toggleDark()"><span class="slider"></span></label></div>
+      <div class="sp-item">
+        <span>🌙 深色模式</span>
+        <label class="switch"><input type="checkbox" id="dark-toggle" onchange="toggleDark()"><span
+            class="slider"></span></label>
+      </div>
+      <div class="sp-item">
+        <span>🆎 駕駛大字體模式</span>
+        <label class="switch"><input type="checkbox" id="large-text-toggle" onchange="toggleLargeText()"><span
+            class="slider"></span></label>
+      </div>
+      <div class="sp-item-col">
+        <div class="sp-item-row">
+          <span>🗣️ 語音導覽語速</span>
+          <span id="voice-rate-val">1.0x</span>
+        </div>
+        <input type="range" id="voice-rate" min="0.5" max="2.0" step="0.1" value="1.0" oninput="saveVoiceSettings()"
+          style="width:100%; margin-top:8px;">
+      </div>
+      <div class="sp-item">
+        <span>📅 旅遊行事曆一鍵匯出</span>
+        <button class="sp-btn" onclick="exportToICS()"><i data-lucide="download"></i> 匯出 (.ics)</button>
+      </div>
+      <div class="sp-item">
+        <span>🔔 早晨推播提醒 (測試)</span>
+        <button class="sp-btn" onclick="testNotification()"><i data-lucide="bell"></i> 啟用/測試</button>
+      </div>
+      <div class="sp-item sp-item-danger">
+        <span>🧳 重置個人資料與快取 (強制取得最新版)</span>
+        <button class="sp-btn sp-btn-danger" onclick="resetAppData()"><i data-lucide="trash-2"></i> 重整</button>
+      </div>
     </div>
   </div>
 

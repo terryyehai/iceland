@@ -1008,8 +1008,84 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 0;
+    padding: 16px 0;
     border-bottom: 1px solid #e5e7eb
+}
+
+.sp-item-col {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 0;
+    border-bottom: 1px solid #e5e7eb
+}
+
+.sp-item-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.sp-btn {
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s;
+}
+
+.sp-btn:active {
+    background: #1e3a8a;
+}
+
+.sp-item-danger {
+    color: #ef4444;
+}
+
+.sp-btn-danger {
+    background: #ef4444;
+}
+
+.sp-btn-danger:active {
+    background: #dc2626;
+}
+
+/* 語音設定拉桿 */
+input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: var(--navy);
+    margin-top: -6px;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 2px;
+}
+
+body.dark-mode input[type=range]::-webkit-slider-runnable-track {
+    background: #4b5563;
+}
+
+body.dark-mode input[type=range]::-webkit-slider-thumb {
+    background: #60a5fa;
 }
 
 .switch {
@@ -1223,9 +1299,26 @@ body.dark-mode .day-card:hover {
     box-shadow: 0 12px 28px rgba(0, 0, 0, .5) !important
 }
 
-/* Lucide 基礎尺寸 */
 .lucide {
     width: 1em;
     height: 1em;
     vertical-align: middle
+}
+
+/* ===== 大字體模式 ===== */
+body.large-text {
+    font-size: 16px;
+}
+
+body.large-text .tip-text,
+body.large-text .desc,
+body.large-text .meta,
+body.large-text .flight-details {
+    font-size: 15px !important;
+    line-height: 1.6;
+}
+
+body.large-text .day-theme,
+body.large-text .name {
+    font-size: 18px !important;
 }
