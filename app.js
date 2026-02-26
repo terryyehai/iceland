@@ -55,6 +55,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initMap();
     fetchWeather();
     fetchExchangeRate();
+    fetchAurora();
+    initPackingList();
     initScrollAnim();
     initDarkMode();
     lucide.createIcons();
@@ -188,6 +190,92 @@ function calcExchange() {
     resultEl.textContent = Math.round(twdVal).toLocaleString();
 }
 
+// ── 極光預測 (Kp Index) ──
+async function fetchAurora() {
+    try {
+        // 使用 NOAA 太空天氣預測中心的免費公開 API (Planetary K-index), 1分鐘更新
+        const res = await fetch('https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json');
+        const data = await res.json();
+        // data 格式第一行為標題，最後一列為最新預測值 ["2026-08-01 12:00:00.000", "2.33"]
+        if (data && data.length > 1) {
+            const latest = data[data.length - 1];
+            const kp = parseFloat(latest[1]);
+            document.getElementById('aurora-kp').textContent = kp.toFixed(1);
+
+            let chance = '極低';
+            let color = '#64748b'; // gray
+            if (kp >= 2 && kp < 4) { chance = '低 (可嘗試攝影)'; color = '#10b981'; } // green
+            if (kp >= 4 && kp < 5) { chance = '中 (肉眼可見)'; color = '#f59e0b'; } // yellow
+            if (kp >= 5) { chance = '高 (風暴級！)'; color = '#ef4444'; } // red
+
+            const chanceEl = document.getElementById('aurora-chance');
+            if (chanceEl) {
+                chanceEl.textContent = chance;
+                chanceEl.style.color = color;
+            }
+        }
+    } catch (e) {
+        console.warn("Fetch Aurora API failed:", e);
+        document.getElementById('aurora-kp').textContent = '--';
+    }
+}
+
+// ── 行李打包清單 ──
+const PACKING_ITEMS = [
+    { id: 'p_jacket', label: '防水防風外套 (Gore-Tex)' },
+    { id: 'p_base', label: '保暖底層衣 (發熱衣/羊毛)' },
+    { id: 'p_shoes', label: '防水登山鞋 (冰川健行必備)' },
+    { id: 'p_plug', label: '歐洲規格轉接頭 (雙圓孔 220V)' },
+    { id: 'p_card', label: '信用卡 (需有預借現金密碼供無人加油站)' },
+    { id: 'p_med', label: '個人常備藥物 & 暈車藥' },
+    { id: 'p_swim', label: '泳衣與大毛巾 (溫泉用)' },
+    { id: 'p_food', label: '保溫瓶與乾糧零食' }
+];
+
+function initPackingList() {
+    const container = document.getElementById('packing-list');
+    if (!container) return;
+
+    const saved = JSON.parse(localStorage.getItem('packingStatus') || '{}');
+
+    container.innerHTML = PACKING_ITEMS.map(item => `
+        <label class="pack-item ${saved[item.id] ? 'checked' : ''}">
+            <input type="checkbox" value="${item.id}" ${saved[item.id] ? 'checked' : ''} onchange="togglePackItem(this)">
+            <span class="pack-label">${item.label}</span>
+        </label>
+    `).join('');
+
+    updatePackingProgress();
+}
+
+// window 物件曝光以供 HTML onchange 呼叫
+window.togglePackItem = function (cb) {
+    const saved = JSON.parse(localStorage.getItem('packingStatus') || '{}');
+    saved[cb.value] = cb.checked;
+    localStorage.setItem('packingStatus', JSON.stringify(saved));
+
+    if (cb.checked) {
+        cb.parentElement.classList.add('checked');
+    } else {
+        cb.parentElement.classList.remove('checked');
+    }
+    updatePackingProgress();
+};
+
+function updatePackingProgress() {
+    const saved = JSON.parse(localStorage.getItem('packingStatus') || '{}');
+    const checkedCount = PACKING_ITEMS.filter(item => saved[item.id]).length;
+    const total = PACKING_ITEMS.length;
+    const percentage = Math.round((checkedCount / total) * 100);
+
+    const fill = document.getElementById('packing-progress-fill');
+    const text = document.getElementById('packing-progress-text');
+    if (fill && text) {
+        fill.style.width = `${percentage}%`;
+        text.textContent = `${checkedCount}/${total} 完成 (${percentage}%)`;
+    }
+}
+
 // ── 滾動動畫 ──
 function initScrollAnim() {
     const observer = new IntersectionObserver((entries) => {
@@ -203,11 +291,31 @@ function initScrollAnim() {
 
 // ── 深色模式 ──
 function initDarkMode() {
-    if (localStorage.getItem('darkMode') === 'true') {
+    // 檢查 LocalStorage 或是系統偏好 (prefers-color-scheme)
+    const saved = localStorage.getItem('darkMode');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    // 如果有儲存設定優先，沒有的話依系統
+    const shouldBeDark = saved === 'true' || (saved === null && prefersDark);
+
+    if (shouldBeDark) {
         document.body.classList.add('dark-mode');
         const toggle = document.getElementById('dark-toggle');
         if (toggle) toggle.checked = true;
     }
+
+    // 監聽系統主題改變
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        if (localStorage.getItem('darkMode') === null) {
+            if (e.matches) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+            const toggle = document.getElementById('dark-toggle');
+            if (toggle) toggle.checked = e.matches;
+        }
+    });
 }
 function toggleDark() {
     const isDark = document.body.classList.toggle('dark-mode');

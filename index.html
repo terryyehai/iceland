@@ -112,6 +112,60 @@
       </div>
       <div class="gas-note">* 郊區油價較高，建議於市區或 Costco (會員限定) 加油。</div>
     </div>
+
+    <!-- 極光預測 -->
+    <div class="info-card aurora-card">
+      <div class="ic-header">
+        <i data-lucide="sparkles"></i>
+        <span>即時太空天氣 (極光指標)</span>
+      </div>
+      <div class="aurora-info">
+        <div class="kp-value" id="aurora-kp">載入中...</div>
+        <div class="kp-label">目前 Kp 指數</div>
+      </div>
+      <div class="aurora-note">
+        極光機率評估：<strong id="aurora-chance" style="color:#10b981">--</strong> <br>
+        <span class="small-note">* Kp > 3 且無雲層時，肉眼可見機率高。</span>
+      </div>
+    </div>
+
+    <!-- 安全與實用連結 -->
+    <div class="info-card">
+      <div class="ic-header">
+        <i data-lucide="shield-alert"></i>
+        <span>冰島自駕必備連結</span>
+      </div>
+      <div class="quick-links">
+        <a href="https://safetravel.is/" target="_blank" class="ql-btn safetravel"><i data-lucide="alert-triangle"></i>
+          SafeTravel (官方警報)</a>
+        <a href="https://umferdin.is/en" target="_blank" class="ql-btn roadis"><i data-lucide="car-front"></i> Road.is
+          (封路與即時路況)</a>
+        <a href="https://en.vedur.is/" target="_blank" class="ql-btn vedur"><i data-lucide="cloud-lightning"></i> Vedur
+          (冰島氣象局)</a>
+      </div>
+      <div class="emergency-contact">
+        <div class="em-icon">🚨</div>
+        <div class="em-text">冰島全國緊急求救電話：</div>
+        <a href="tel:112" class="em-number">112</a>
+      </div>
+    </div>
+
+    <!-- 必備行李清單 -->
+    <div class="info-card packing-card">
+      <div class="ic-header">
+        <i data-lucide="check-square"></i>
+        <span>冰島必備行李清單</span>
+      </div>
+      <div class="packing-list" id="packing-list">
+        <!-- JS 動態生成 -->
+      </div>
+      <div class="packing-progress">
+        <div class="progress-bar">
+          <div class="progress-fill" id="packing-progress-fill"></div>
+        </div>
+        <div class="progress-text" id="packing-progress-text">0/8 已準備</div>
+      </div>
+    </div>
   </div>
 
 
