@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img">
+  <title>Day 10 眾神瀑布與米湖地熱</title>
+  <style>
+    .falls { animation: flow 1.5s linear infinite; }
+    .geo { animation: rise 6s ease-in infinite; opacity: 0; }
+    .geo.g2 { animation-delay: 2s; }
+    .geo.g3 { animation-delay: 4s; }
+    .bubble { animation: bubblePop 3.4s ease-in-out infinite; transform-origin: center; }
+    @keyframes flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -38; } }
+    @keyframes rise { 0% { transform: translateY(0) scale(.8); opacity:0; } 25% { opacity:.7; } 100% { transform: translateY(-100px) scale(1.4); opacity:0; } }
+    @keyframes bubblePop { 0%,100% { transform: scale(.9); } 50% { transform: scale(1.15); } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <linearGradient id="d10sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#94a3b8"/>
+      <stop offset="1" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="d10pool" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#67e8f9"/>
+      <stop offset="1" stop-color="#0e7490"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#d10sky)"/>
+
+  <!-- 馬蹄形眾神瀑布（左半） -->
+  <g>
+    <path d="M0 140 L 420 140 L 420 190 Q 300 204 220 196 L 220 300 L 0 300 Z" fill="#57534e"/>
+    <path d="M0 140 L 420 140 L 420 160 L 0 160 Z" fill="#78716c"/>
+    <!-- 弧形水簾 -->
+    <g stroke="#e0f2fe" stroke-width="10" fill="none" stroke-linecap="round">
+      <path class="falls" d="M250 160 L 250 268" stroke-dasharray="18 12"/>
+      <path class="falls" d="M280 162 L 280 276" stroke-dasharray="18 12" style="animation-delay:.3s"/>
+      <path class="falls" d="M310 164 L 310 280" stroke-dasharray="18 12" style="animation-delay:.6s"/>
+      <path class="falls" d="M340 162 L 340 276" stroke-dasharray="18 12" style="animation-delay:.15s"/>
+      <path class="falls" d="M370 160 L 370 270" stroke-dasharray="18 12" style="animation-delay:.45s"/>
+      <path class="falls" d="M400 158 L 400 262" stroke-dasharray="18 12" style="animation-delay:.75s"/>
+    </g>
+    <path d="M232 158 L 416 156 L 416 170 L 232 172 Z" fill="#f0f9ff"/>
+    <!-- 瀑潭 -->
+    <path d="M220 268 Q 330 296 420 262 L 420 330 Q 320 348 220 330 Z" fill="#38bdf8"/>
+    <ellipse cx="320" cy="286" rx="90" ry="14" fill="#e0f2fe" opacity=".85"/>
+  </g>
+
+  <!-- 中央河谷往前景 -->
+  <path d="M220 330 Q 320 348 420 330 L 460 450 L 180 450 Z" fill="#0ea5e9"/>
+  <g stroke="#bae6fd" stroke-width="4" fill="none" opacity=".7" stroke-linecap="round">
+    <path class="falls" d="M290 340 Q 292 390 284 444" stroke-dasharray="20 14"/>
+    <path class="falls" d="M360 342 Q 362 392 372 444" stroke-dasharray="20 14" style="animation-delay:.5s"/>
+  </g>
+
+  <!-- 右側：米湖地熱區 -->
+  <g>
+    <path d="M420 190 L 800 190 L 800 450 L 460 450 L 424 330 Z" fill="#b45309"/>
+    <path d="M520 240 Q 640 226 800 240 L 800 450 L 480 450 Z" fill="#92400e"/>
+    <!-- 硫磺地與泥漿池 -->
+    <ellipse cx="600" cy="330" rx="70" ry="20" fill="url(#d10pool)"/>
+    <ellipse cx="740" cy="392" rx="58" ry="17" fill="#a8a29e"/>
+    <circle class="bubble" cx="726" cy="390" r="7" fill="#d6d3d1"/>
+    <circle class="bubble" cx="754" cy="394" r="5" fill="#d6d3d1" style="animation-delay:1.2s"/>
+    <!-- 蒸氣 -->
+    <g fill="#f8fafc">
+      <g class="geo"><ellipse cx="600" cy="316" rx="28" ry="15"/><ellipse cx="618" cy="300" rx="18" ry="10"/></g>
+      <g class="geo g2"><ellipse cx="740" cy="380" rx="24" ry="13"/><ellipse cx="756" cy="366" rx="15" ry="9"/></g>
+      <g class="geo g3"><ellipse cx="530" cy="290" rx="20" ry="11"/><ellipse cx="544" cy="276" rx="13" ry="8"/></g>
+    </g>
+    <!-- 蒸氣孔石堆 -->
+    <path d="M510 300 q 20 -18 40 0 q -20 10 -40 0" fill="#78716c"/>
+  </g>
+
+  <!-- 步道欄杆 -->
+  <g stroke="#57534e" stroke-width="4" stroke-linecap="round">
+    <path d="M480 420 L 660 402"/>
+    <path d="M500 422 L 500 442 M560 416 L 560 436 M620 410 L 620 430"/>
+  </g>
+</svg>

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img">
+  <title>Day 9 Stuðlagil 玄武岩峽谷：藍綠冰川河與柱狀節理</title>
+  <style>
+    .river { animation: riverflow 3s linear infinite; }
+    .sheep { animation: graze 8s ease-in-out infinite; transform-origin: 120px 300px; }
+    @keyframes riverflow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -60; } }
+    @keyframes graze { 0%,70%,100% { transform: rotate(0); } 80%,90% { transform: rotate(5deg); } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <linearGradient id="d9sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bae6fd"/>
+      <stop offset="1" stop-color="#fef9c3"/>
+    </linearGradient>
+    <linearGradient id="d9river" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2dd4bf"/>
+      <stop offset="1" stop-color="#0d9488"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#d9sky)"/>
+  <circle cx="140" cy="80" r="34" fill="#fde68a"/>
+
+  <!-- 草原頂 -->
+  <path d="M0 240 L 800 240 L 800 190 Q 600 176 400 192 Q 180 206 0 192 Z" fill="#65a30d"/>
+  <path d="M0 192 Q 200 206 420 192 Q 620 178 800 190 L 800 210 Q 600 196 400 210 Q 180 224 0 212 Z" fill="#84cc16" opacity=".6"/>
+
+  <!-- 左岸玄武岩柱 -->
+  <g fill="#44403c">
+    <path d="M0 240 L 40 240 L 44 372 L 0 372 Z"/>
+    <path d="M44 240 L 84 240 L 80 388 L 46 386 Z" fill="#57534e"/>
+    <path d="M86 240 L 124 240 L 128 370 L 84 372 Z"/>
+    <path d="M126 240 L 166 240 L 160 396 L 126 394 Z" fill="#57534e"/>
+    <path d="M168 240 L 206 240 L 212 380 L 166 382 Z"/>
+    <path d="M208 240 L 248 240 L 242 402 L 210 400 Z" fill="#57534e"/>
+    <path d="M250 240 L 290 240 L 296 384 L 248 388 Z"/>
+  </g>
+  <!-- 右岸玄武岩柱（六角感、微傾） -->
+  <g fill="#292524">
+    <path d="M800 240 L 760 240 L 756 372 L 800 372 Z"/>
+    <path d="M758 240 L 718 240 L 722 390 L 754 388 Z" fill="#44403c"/>
+    <path d="M716 240 L 678 240 L 672 374 L 718 376 Z"/>
+    <path d="M676 240 L 636 240 L 642 398 L 674 396 Z" fill="#44403c"/>
+    <path d="M634 240 L 594 240 L 588 382 L 636 384 Z"/>
+    <path d="M592 240 L 552 240 L 558 404 L 590 402 Z" fill="#44403c"/>
+    <path d="M550 240 L 512 240 L 506 388 L 552 390 Z"/>
+  </g>
+  <!-- 柱頂節理線 -->
+  <g stroke="#1c1917" stroke-width="2" opacity=".4">
+    <path d="M44 240 L 44 370 M126 240 L 128 392 M208 240 L 210 398"/>
+    <path d="M758 240 L 756 370 M676 240 L 674 394 M592 240 L 590 400"/>
+  </g>
+
+  <!-- 冰川河 -->
+  <path d="M290 240 Q 300 340 296 450 L 508 450 Q 502 340 512 240 Z" fill="url(#d9river)"/>
+  <g stroke="#99f6e4" stroke-width="5" fill="none" stroke-linecap="round" opacity=".8">
+    <path class="river" d="M330 250 Q 336 340 330 440" stroke-dasharray="26 18"/>
+    <path class="river" d="M400 248 Q 398 340 402 444" stroke-dasharray="26 18" style="animation-delay:.5s"/>
+    <path class="river" d="M470 250 Q 464 340 472 440" stroke-dasharray="26 18" style="animation-delay:1s"/>
+  </g>
+
+  <!-- 底部岩灘 -->
+  <path d="M0 372 Q 60 380 128 388 Q 210 400 296 450 L 0 450 Z" fill="#78716c"/>
+  <path d="M800 372 Q 740 380 672 390 Q 590 402 508 450 L 800 450 Z" fill="#57534e"/>
+
+  <!-- 岸邊小羊 -->
+  <g class="sheep">
+    <ellipse cx="120" cy="212" rx="22" ry="13" fill="#f8fafc"/>
+    <circle cx="142" cy="204" r="8" fill="#1c1917"/>
+    <path d="M108 224 l -2 12 m 14 -10 l 0 12 m 12 -12 l 2 12" stroke="#1c1917" stroke-width="3.4" stroke-linecap="round"/>
+  </g>
+
+  <!-- 觀景的人 -->
+  <g>
+    <circle cx="700" cy="222" r="7" fill="#fcd9b8"/>
+    <rect x="693" y="229" width="13" height="21" rx="5" fill="#ea580c"/>
+  </g>
+</svg>

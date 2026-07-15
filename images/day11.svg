@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img">
+  <title>Day 11 胡薩維克賞鯨：躍出海面的座頭鯨</title>
+  <style>
+    .whale { animation: breach 9s ease-in-out infinite; transform-origin: 430px 330px; }
+    .spout { animation: spout 9s ease-out infinite; transform-origin: 470px 190px; opacity: 0; }
+    .boat { animation: rock 5s ease-in-out infinite; transform-origin: 170px 320px; }
+    .gull { animation: fly 22s linear infinite; }
+    .splash { animation: splash 9s ease-out infinite; opacity: 0; transform-origin: 430px 340px; }
+    @keyframes breach {
+      0%, 8% { transform: translateY(150px) rotate(12deg); }
+      30% { transform: translateY(0) rotate(-4deg); }
+      45% { transform: translateY(6px) rotate(-2deg); }
+      70%, 100% { transform: translateY(150px) rotate(12deg); }
+    }
+    @keyframes spout {
+      0%, 26% { opacity: 0; transform: scaleY(.2); }
+      36% { opacity: .9; transform: scaleY(1); }
+      52% { opacity: 0; transform: scaleY(1.2) translateY(-16px); }
+      100% { opacity: 0; }
+    }
+    @keyframes splash {
+      0%, 24% { opacity: 0; transform: scale(.4); }
+      36% { opacity: .9; transform: scale(1); }
+      58% { opacity: 0; transform: scale(1.5); }
+      100% { opacity: 0; }
+    }
+    @keyframes rock { 0%,100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+    @keyframes fly { from { transform: translateX(-60px); } to { transform: translateX(860px); } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <linearGradient id="d11sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7dd3fc"/>
+      <stop offset="1" stop-color="#f0f9ff"/>
+    </linearGradient>
+    <linearGradient id="d11sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0369a1"/>
+      <stop offset="1" stop-color="#082f49"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#d11sky)"/>
+  <circle cx="90" cy="80" r="32" fill="#fef9c3"/>
+  <ellipse cx="560" cy="80" rx="90" ry="15" fill="#ffffff" opacity=".85"/>
+  <ellipse cx="700" cy="120" rx="60" ry="11" fill="#ffffff" opacity=".6"/>
+
+  <!-- 海鷗 -->
+  <g class="gull" stroke="#475569" stroke-width="3" fill="none" stroke-linecap="round">
+    <path d="M0 120 q 9 -9 18 0 q 9 -9 18 0"/>
+    <path d="M46 146 q 7 -7 14 0 q 7 -7 14 0" opacity=".7"/>
+  </g>
+
+  <!-- 遠山 -->
+  <polygon points="580,258 660,190 740,240 800,210 800,262 580,262" fill="#94a3b8" opacity=".7"/>
+
+  <!-- 海 -->
+  <rect y="258" width="800" height="192" fill="url(#d11sea)"/>
+
+  <!-- 賞鯨船 -->
+  <g class="boat">
+    <path d="M100 316 L 250 316 L 228 348 L 118 348 Z" fill="#f8fafc"/>
+    <rect x="130" y="290" width="80" height="26" rx="5" fill="#0ea5e9"/>
+    <rect x="150" y="270" width="34" height="22" rx="4" fill="#e2e8f0"/>
+    <rect x="196" y="252" width="6" height="40" fill="#475569"/>
+    <path d="M202 254 l 24 5 l -24 7 Z" fill="#ef4444"/>
+    <!-- 乘客 -->
+    <g>
+      <circle cx="128" cy="284" r="6" fill="#fcd9b8"/><rect x="123" y="290" width="10" height="14" rx="4" fill="#dc2626"/>
+      <circle cx="222" cy="284" r="6" fill="#f3c39d"/><rect x="217" y="290" width="10" height="14" rx="4" fill="#16a34a"/>
+    </g>
+  </g>
+
+  <!-- 座頭鯨 -->
+  <g class="whale">
+    <path d="M330 340 Q 348 250 420 218 Q 470 196 512 216 Q 540 230 546 262 Q 550 288 528 316 L 500 300 Q 512 274 500 254 Q 484 232 448 244 Q 396 262 376 330 Z" fill="#1e3a5f"/>
+    <path d="M376 330 Q 396 262 448 244 Q 470 236 488 242 Q 470 268 448 292 Q 420 320 376 330 Z" fill="#f1f5f9"/>
+    <!-- 胸鰭 -->
+    <path d="M430 280 Q 400 316 356 322 Q 372 286 406 268 Z" fill="#e2e8f0"/>
+    <!-- 尾鰭 -->
+    <path d="M528 316 Q 560 300 584 312 Q 566 326 552 344 Q 540 330 516 330 Z" fill="#1e3a5f"/>
+    <!-- 眼與紋 -->
+    <circle cx="486" cy="252" r="4" fill="#0f172a"/>
+    <g stroke="#cbd5e1" stroke-width="2.4" opacity=".7">
+      <path d="M420 300 q 26 -20 52 -30 M408 316 q 30 -24 62 -36"/>
+    </g>
+  </g>
+  <!-- 噴氣 -->
+  <g class="spout" stroke="#e0f2fe" stroke-width="6" stroke-linecap="round" fill="none">
+    <path d="M470 200 Q 466 172 452 156"/>
+    <path d="M472 198 Q 474 168 470 148"/>
+    <path d="M474 200 Q 482 172 494 158"/>
+  </g>
+  <!-- 水花 -->
+  <g class="splash" fill="#bae6fd">
+    <ellipse cx="430" cy="340" rx="90" ry="16"/>
+    <path d="M350 336 q -12 -22 -22 -28 M510 338 q 14 -22 24 -28" stroke="#bae6fd" stroke-width="7" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <!-- 前景浪 -->
+  <path d="M-10 420 Q 120 406 260 418 T 540 418 T 810 416 L 810 450 L -10 450 Z" fill="#0c4a6e"/>
+</svg>

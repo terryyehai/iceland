@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img">
+  <title>Day 4 南岸：塞里雅蘭瀑布與蒼綠峭壁</title>
+  <style>
+    .falls { animation: flow 1.4s linear infinite; }
+    .mist { animation: mist 6s ease-in-out infinite; transform-origin: 400px 400px; }
+    .bird { animation: fly 18s linear infinite; }
+    @keyframes flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -40; } }
+    @keyframes mist { 0%,100% { transform: scale(1); opacity:.75; } 50% { transform: scale(1.12); opacity:.5; } }
+    @keyframes fly { from { transform: translateX(-80px); } to { transform: translateX(880px); } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <linearGradient id="d4sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bfdbfe"/>
+      <stop offset="1" stop-color="#fefce8"/>
+    </linearGradient>
+    <linearGradient id="d4cliff" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#166534"/>
+      <stop offset="1" stop-color="#14532d"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#d4sky)"/>
+  <circle cx="130" cy="86" r="36" fill="#fef08a"/>
+
+  <!-- 海鳥 -->
+  <g class="bird" stroke="#475569" stroke-width="3" fill="none" stroke-linecap="round">
+    <path d="M0 100 q 10 -10 20 0 q 10 -10 20 0"/>
+    <path d="M50 130 q 8 -8 16 0 q 8 -8 16 0" opacity=".7"/>
+  </g>
+
+  <!-- 蒼綠峭壁 -->
+  <path d="M240 60 Q 300 50 380 64 L 800 60 L 800 450 L 560 450 Q 540 300 520 240 Q 480 120 380 96 Q 300 84 250 110 Z" fill="url(#d4cliff)"/>
+  <path d="M420 80 L 800 74 L 800 450 L 640 450 Q 630 300 600 220 Q 560 120 460 96 Z" fill="#15803d" opacity=".7"/>
+  <!-- 壁面青苔紋理 -->
+  <g fill="#22c55e" opacity=".35">
+    <ellipse cx="500" cy="180" rx="46" ry="14" transform="rotate(-18 500 180)"/>
+    <ellipse cx="620" cy="260" rx="60" ry="16" transform="rotate(-12 620 260)"/>
+    <ellipse cx="700" cy="150" rx="52" ry="15" transform="rotate(-16 700 150)"/>
+  </g>
+
+  <!-- 瀑布主體 -->
+  <g stroke="#e0f2fe" stroke-width="12" fill="none" stroke-linecap="round">
+    <path class="falls" d="M436 92 Q 438 240 434 392" stroke-dasharray="20 12"/>
+    <path class="falls" d="M456 94 Q 458 240 456 396" stroke-dasharray="20 12" style="animation-delay:.35s"/>
+    <path class="falls" d="M476 96 Q 476 240 478 394" stroke-dasharray="20 12" style="animation-delay:.7s" opacity=".85"/>
+  </g>
+  <path d="M420 86 L 492 90 L 486 104 L 426 100 Z" fill="#f0f9ff"/>
+
+  <!-- 瀑底水潭與水霧 -->
+  <path d="M0 400 Q 250 380 460 402 Q 640 420 800 404 L 800 450 L 0 450 Z" fill="#38bdf8"/>
+  <ellipse class="mist" cx="452" cy="396" rx="92" ry="26" fill="#f0f9ff"/>
+  <ellipse class="mist" cx="452" cy="404" rx="140" ry="18" fill="#e0f2fe" style="animation-delay:2s"/>
+
+  <!-- 前景草地與步道（可走到瀑布後方） -->
+  <path d="M0 356 Q 160 336 300 360 Q 380 374 420 400 L 420 450 L 0 450 Z" fill="#16a34a"/>
+  <path d="M40 450 Q 150 400 300 390 Q 370 386 408 404" stroke="#fde68a" stroke-width="10" fill="none" stroke-linecap="round" opacity=".85"/>
+
+  <!-- 遊客剪影 -->
+  <g>
+    <circle cx="250" cy="382" r="8" fill="#1e293b"/>
+    <rect x="243" y="390" width="14" height="24" rx="6" fill="#1e293b"/>
+    <circle cx="286" cy="388" r="7" fill="#1e293b"/>
+    <rect x="280" y="395" width="12" height="21" rx="5" fill="#1e293b"/>
+  </g>
+</svg>

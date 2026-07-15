@@ -1,43 +1,7 @@
 /* ===== app.js — 冰島自駕遊 PWA 主邏輯 ===== */
 
-// ── 16 天行程資料 ──
-const DAYS = [
-    { day: 1, date: '8/1（五）', theme: '抵達雷克雅維克', icon: '✈️', tags: ['抵達', 'KEF機場', '市區漫步'], accent: 'accent-d1' },
-    { day: 2, date: '8/2（六）', theme: '黃金圈經典路線', icon: '⛲', tags: ['辛格維利爾', '間歇泉', '黃金瀑布'], accent: 'accent-d2' },
-    { day: 3, date: '8/3（日）', theme: '南海岸瀑布之旅', icon: '🌊', tags: ['塞里雅蘭瀑布', '斯科加瀑布', 'Dyrhólaey'], accent: 'accent-d3' },
-    { day: 4, date: '8/4（一）', theme: '黑沙灘與海蝕柱', icon: '🖤', tags: ['Reynisfjara', '維克小鎮', '玄武岩柱'], accent: 'accent-d4' },
-    { day: 5, date: '8/5（二）', theme: '冰河湖與鑽石沙灘', icon: '🧊', tags: ['Jökulsárlón', '鑽石沙灘', '冰河健行'], accent: 'accent-d5' },
-    { day: 6, date: '8/6（三）', theme: '東部峽灣探索', icon: '⛰️', tags: ['東峽灣', '漁村', '野生馴鹿'], accent: 'accent-d6' },
-    { day: 7, date: '8/7（四）', theme: '東峽灣至米湖', icon: '🚗', tags: ['黛提瀑布', 'Stuðlagil峽谷', '自駕公路'], accent: 'accent-d7' },
-    { day: 8, date: '8/8（五）', theme: '米湖地熱奇觀', icon: '♨️', tags: ['米湖溫泉', 'Hverir地熱', '偽火山口'], accent: 'accent-d8' },
-    { day: 9, date: '8/9（六）', theme: '胡薩維克賞鯨', icon: '🐋', tags: ['賞鯨', 'Puffin', '眾神瀑布'], accent: 'accent-d9' },
-    { day: 10, date: '8/10（日）', theme: '阿克雷里北部之都', icon: '🏘️', tags: ['阿克雷里教堂', '植物園', '峽灣'], accent: 'accent-d10' },
-    { day: 11, date: '8/11（一）', theme: '西北冰島公路', icon: '🛤️', tags: ['Skagafjörður', '馬群', '布倫迪歐斯'], accent: 'accent-d11' },
-    { day: 12, date: '8/12（二）', theme: '斯奈山半島東段', icon: '🌄', tags: ['教會山', 'Grundarfjörður', 'Stykkishólmur'], accent: 'accent-d12' },
-    { day: 13, date: '8/13（三）', theme: '斯奈山半島西段', icon: '🏔️', tags: ['斯奈菲爾冰川', 'Djúpalónssandur', 'Arnarstapi'], accent: 'accent-d13' },
-    { day: 14, date: '8/14（四）', theme: '雷克雅維克市區', icon: '🎨', tags: ['哈爾格林姆教堂', '彩虹街', '哈帕音樂廳'], accent: 'accent-d14' },
-    { day: 15, date: '8/15（五）', theme: '藍湖溫泉與紀念品', icon: '💎', tags: ['Blue Lagoon', '紀念品', 'Laugavegur'], accent: 'accent-d15' },
-    { day: 16, date: '8/16（六）', theme: '返程', icon: '🛫', tags: ['KEF機場', '免稅店', '回程'], accent: 'accent-d16' },
-];
-
-// ── 地圖標記資料 (環島主要點) ──
-const MAP_SPOTS = [
-    { name: '雷克雅維克', lat: 64.1466, lng: -21.9426, c: '#2563eb' },
-    { name: '辛格維利爾', lat: 64.2559, lng: -21.1306, c: '#f59e0b' },
-    { name: '間歇泉', lat: 64.3103, lng: -20.3023, c: '#f59e0b' },
-    { name: '黃金瀑布', lat: 64.3271, lng: -20.1199, c: '#f59e0b' },
-    { name: '塞里雅蘭瀑布', lat: 63.6156, lng: -19.9925, c: '#10b981' },
-    { name: '斯科加瀑布', lat: 63.5321, lng: -19.5113, c: '#10b981' },
-    { name: '維克', lat: 63.4186, lng: -19.0060, c: '#1e293b' },
-    { name: '冰河湖', lat: 64.0784, lng: -16.2306, c: '#06b6d4' },
-    { name: '埃伊爾斯塔濟', lat: 65.2500, lng: -14.3948, c: '#8b5cf6' },
-    { name: '米湖', lat: 65.6009, lng: -16.9969, c: '#ef4444' },
-    { name: '胡薩維克', lat: 66.0449, lng: -17.3389, c: '#14b8a6' },
-    { name: '阿克雷里', lat: 65.6835, lng: -18.0878, c: '#f97316' },
-    { name: '教會山', lat: 64.9264, lng: -23.4094, c: '#ec4899' },
-    { name: '藍湖', lat: 63.8804, lng: -22.4495, c: '#0ea5e9' },
-    { name: 'KEF機場', lat: 63.9850, lng: -22.6056, c: '#ef4444' },
-];
+// ── 16 天行程資料：來自 data.js（單一資料來源，與各 day 頁一致） ──
+const DAYS = window.TRIP_DATA;
 
 // ── 天氣城市 ──
 const WEATHER_CITIES = [
@@ -57,6 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchExchangeRate();
     fetchAurora();
     fetchFlights();
+    initPackingList();
+    renderExpenseOverview();
     initScrollAnim();
     initDarkMode();
     initLargeText();
@@ -65,23 +31,56 @@ document.addEventListener('DOMContentLoaded', () => {
     registerSW();
 });
 
-// ── 渲染日期卡片 ──
+// ── 渲染日期卡片（含 SVG 縮圖與打卡進度） ──
 function renderDayCards() {
     const container = document.getElementById('day-cards');
-    container.innerHTML = DAYS.map(d => `
+    const visitedAll = JSON.parse(localStorage.getItem('visitedSpots') || '{}');
+    container.innerHTML = DAYS.map(d => {
+        const done = Object.keys(visitedAll[d.day] || {}).length;
+        const pct = Math.round(done / d.spots.length * 100);
+        const tags = d.markers.slice(0, 3).map(m => m.name);
+        return `
     <a class="day-card" href="day${d.day}.html">
-      <div class="day-accent ${d.accent}">
+      <div class="day-thumb" style="--accent:${d.color}">
+        <img src="images/day${d.day}.svg" alt="" loading="lazy" onerror="this.style.display='none'">
         <span class="day-num">${String(d.day).padStart(2, '0')}</span>
-        <span class="day-label">DAY</span>
+        ${pct > 0 ? `<span class="day-pct ${pct === 100 ? 'full' : ''}">${pct === 100 ? '✓' : pct + '%'}</span>` : ''}
       </div>
       <div class="day-body">
         <div class="day-meta"><span class="day-date">${d.date}</span></div>
-        <div class="day-theme">${d.icon} ${d.theme}</div>
-        <div class="attraction-tags">${d.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+        <div class="day-theme">${d.theme}</div>
+        <div class="attraction-tags">${tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+        ${pct > 0 ? `<div class="day-mini-progress"><div style="width:${pct}%;background:${d.color}"></div></div>` : ''}
       </div>
       <div class="day-arrow">›</div>
-    </a>
-  `).join('');
+    </a>`;
+    }).join('');
+}
+
+// ── 旅費總覽（各 day 頁記帳的加總） ──
+function renderExpenseOverview() {
+    const el = document.getElementById('expense-overview');
+    if (!el) return;
+    const all = JSON.parse(localStorage.getItem('expenses') || '{}');
+    const perDay = DAYS.map(d => ({
+        day: d.day, color: d.color,
+        total: (all[d.day] || []).reduce((s, e) => s + e.a, 0)
+    }));
+    const grand = perDay.reduce((s, d) => s + d.total, 0);
+    if (grand === 0) {
+        el.innerHTML = '<div class="eo-empty">還沒有支出記錄。到每日行程頁的「今日記帳」隨手記，這裡會自動加總。</div>';
+        return;
+    }
+    const max = Math.max(...perDay.map(d => d.total));
+    el.innerHTML = `
+      <div class="eo-total">總支出 <b>${grand.toLocaleString()} ISK</b> ≈ <b>NT$ ${Math.round(grand * currentIskToTwdRate).toLocaleString()}</b></div>
+      <div class="eo-bars">
+        ${perDay.map(d => `
+          <a class="eo-bar" href="day${d.day}.html" title="Day ${d.day}：${d.total.toLocaleString()} ISK">
+            <div class="eo-bar-fill" style="height:${d.total ? Math.max(8, Math.round(d.total / max * 100)) : 0}%;background:${d.color}"></div>
+            <span>${d.day}</span>
+          </a>`).join('')}
+      </div>`;
 }
 
 // ── 倒數計時器 ──
@@ -108,14 +107,20 @@ function initMap() {
         attribution: '© OpenStreetMap',
         maxZoom: 18
     }).addTo(map);
-    // 加入標記
-    MAP_SPOTS.forEach(s => {
-        L.circleMarker([s.lat, s.lng], { radius: 6, fillColor: s.c, color: '#fff', weight: 2, fillOpacity: .9 })
-            .addTo(map).bindPopup(`<b>${s.name}</b>`);
+    // 每天取一個代表點（冰島境內），popup 可直接進入該日行程
+    const dayStops = DAYS
+        .map(d => {
+            const mk = d.markers.find(m => m.lat > 60);
+            return mk ? { day: d.day, theme: d.theme, color: d.color, lat: mk.lat, lng: mk.lng, name: mk.name } : null;
+        })
+        .filter(Boolean);
+    dayStops.forEach(s => {
+        L.circleMarker([s.lat, s.lng], { radius: 7, fillColor: s.color, color: '#fff', weight: 2, fillOpacity: .9 })
+            .addTo(map)
+            .bindPopup(`<b>Day ${s.day}</b>｜${s.name}<br><a href="day${s.day}.html">${s.theme} ›</a>`);
     });
-    // 畫環島路線 (簡化折線)
-    const route = MAP_SPOTS.map(s => [s.lat, s.lng]);
-    route.push(route[0]); // 回到起點
+    // 畫環島路線（依日期順序）
+    const route = dayStops.map(s => [s.lat, s.lng]);
     L.polyline(route, { color: '#2563eb', weight: 2, dashArray: '6,4', opacity: .6 }).addTo(map);
 }
 
@@ -166,8 +171,10 @@ async function fetchExchangeRate() {
         const data = await res.json();
         if (data && data.rates && data.rates.TWD) {
             currentIskToTwdRate = data.rates.TWD;
+            localStorage.setItem('iskRate', String(currentIskToTwdRate)); // 供 day 頁記帳換算使用
             document.getElementById('isk-to-twd-rate').textContent = currentIskToTwdRate.toFixed(4);
             calcExchange();
+            renderExpenseOverview(); // 匯率更新後重算 TWD
         } else {
             throw new Error("No TWD rate found");
         }
@@ -511,8 +518,8 @@ function exportToICS() {
     let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Iceland PWA//TW\n";
 
     DAYS.forEach(d => {
-        // 從 '8/1（五）' 中萃取出日期
-        const match = d.date.match(/(\d+)\/(\d+)/);
+        // 從 '8月1日（週六）' 中萃取出日期
+        const match = d.date.match(/(\d+)月(\d+)日/);
         if (match) {
             let m = String(match[1]).padStart(2, '0');
             let dd = String(match[2]).padStart(2, '0');
@@ -522,7 +529,7 @@ function exportToICS() {
             icsContent += `DTSTART;VALUE=DATE:${dateStr}\n`;
             icsContent += `DTEND;VALUE=DATE:${dateStr}\n`;
             icsContent += `SUMMARY:[冰島 Day ${d.day}] ${d.theme}\n`;
-            let desc = d.tags.join(', ');
+            let desc = d.spots.map(s => `${s.time} ${s.title}`).join('｜').replace(/[\r\n]/g, ' ');
             icsContent += `DESCRIPTION:${desc}\n`;
             icsContent += "END:VEVENT\n";
         }

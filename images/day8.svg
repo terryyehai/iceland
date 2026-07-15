@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img">
+  <title>Day 8 東峽灣：Seyðisfjörður 彩虹街與藍教堂</title>
+  <style>
+    .fog { animation: fogmove 14s ease-in-out infinite; }
+    .fog.f2 { animation-delay: 5s; animation-duration: 18s; }
+    .flag { animation: sway 4s ease-in-out infinite; transform-origin: 585px 208px; }
+    @keyframes fogmove { 0%,100% { transform: translateX(0); opacity:.7; } 50% { transform: translateX(60px); opacity:.45; } }
+    @keyframes sway { 0%,100% { transform: skewX(0); } 50% { transform: skewX(6deg); } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <linearGradient id="d8sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#93c5fd"/>
+      <stop offset="1" stop-color="#e0f2fe"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#d8sky)"/>
+
+  <!-- 峽灣山壁 -->
+  <path d="M0 300 L 0 90 Q 120 60 220 130 Q 300 190 340 300 Z" fill="#475569"/>
+  <path d="M800 300 L 800 70 Q 660 50 560 140 Q 490 210 460 300 Z" fill="#334155"/>
+  <path d="M0 300 L 0 160 Q 90 140 170 210 Q 230 260 250 300 Z" fill="#1e293b" opacity=".6"/>
+  <!-- 山頂殘雪 -->
+  <path d="M60 92 L 100 78 L 140 100 L 104 116 Z" fill="#f1f5f9"/>
+  <path d="M660 78 L 700 64 L 740 88 L 704 102 Z" fill="#f1f5f9"/>
+
+  <!-- 霧帶 -->
+  <ellipse class="fog" cx="200" cy="180" rx="180" ry="26" fill="#f8fafc"/>
+  <ellipse class="fog f2" cx="600" cy="150" rx="200" ry="30" fill="#f8fafc"/>
+
+  <!-- 地面 -->
+  <rect y="300" width="800" height="150" fill="#94a3b8"/>
+  <path d="M0 300 L 800 300 L 800 320 L 0 320 Z" fill="#64748b" opacity=".5"/>
+
+  <!-- 彩虹街（透視） -->
+  <g>
+    <path d="M368 450 L 432 450 L 414 300 L 386 300 Z" fill="#e2e8f0"/>
+    <path d="M372 450 L 380 450 L 390 300 L 387 300 Z" fill="#ef4444" transform="translate(0,0)"/>
+    <g>
+      <path d="M368 450 L 377 450 L 388 300 L 386 300 Z" fill="#ef4444"/>
+      <path d="M377 450 L 386 450 L 391 300 L 388 300 Z" fill="#f97316"/>
+      <path d="M386 450 L 395 450 L 394 300 L 391 300 Z" fill="#facc15"/>
+      <path d="M395 450 L 405 450 L 397 300 L 394 300 Z" fill="#22c55e"/>
+      <path d="M405 450 L 414 450 L 400 300 L 397 300 Z" fill="#3b82f6"/>
+      <path d="M414 450 L 423 450 L 404 300 L 400 300 Z" fill="#6366f1"/>
+      <path d="M423 450 L 432 450 L 408 300 L 404 300 Z" fill="#a855f7"/>
+    </g>
+  </g>
+
+  <!-- 藍教堂 -->
+  <g>
+    <rect x="352" y="238" width="96" height="64" rx="4" fill="#7dd3fc"/>
+    <path d="M348 240 L 400 214 L 452 240 Z" fill="#38bdf8"/>
+    <rect x="386" y="196" width="28" height="46" fill="#7dd3fc"/>
+    <path d="M382 198 L 400 180 L 418 198 Z" fill="#38bdf8"/>
+    <rect x="397" y="164" width="6" height="18" fill="#0f172a"/>
+    <rect x="392" y="252" width="16" height="50" rx="8" fill="#0c4a6e"/>
+    <circle cx="400" cy="228" r="7" fill="#f8fafc"/>
+    <g fill="#f0f9ff">
+      <rect x="362" y="252" width="12" height="22" rx="6"/>
+      <rect x="426" y="252" width="12" height="22" rx="6"/>
+    </g>
+  </g>
+
+  <!-- 兩側小屋 -->
+  <g>
+    <rect x="220" y="260" width="70" height="42" fill="#dc2626"/>
+    <path d="M214 262 L 255 236 L 296 262 Z" fill="#7f1d1d"/>
+    <rect x="244" y="276" width="18" height="26" fill="#fef3c7"/>
+    <rect x="520" y="258" width="72" height="44" fill="#f59e0b"/>
+    <path d="M514 260 L 556 234 L 598 260 Z" fill="#92400e"/>
+    <rect x="544" y="274" width="18" height="28" fill="#fef9c3"/>
+    <!-- 旗幟 -->
+    <rect x="583" y="208" width="4" height="52" fill="#57534e"/>
+    <path class="flag" d="M587 210 l 30 6 l -30 8 Z" fill="#dc2626"/>
+  </g>
+
+  <!-- 路燈與行人 -->
+  <g>
+    <circle cx="330" cy="356" r="8" fill="#fcd9b8"/>
+    <rect x="323" y="364" width="14" height="26" rx="6" fill="#0e7490"/>
+    <circle cx="474" cy="360" r="8" fill="#f3c39d"/>
+    <rect x="467" y="368" width="14" height="24" rx="6" fill="#be185d"/>
+  </g>
+</svg>

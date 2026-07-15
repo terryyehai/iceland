@@ -15,7 +15,7 @@
     rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://unpkg.com/lucide@0.462.0"></script>
   <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -228,6 +228,17 @@
         <div class="progress-text" id="packing-progress-text">0/8 已準備</div>
       </div>
     </div>
+
+    <!-- 旅費總覽 -->
+    <div class="info-card expense-overview-card">
+      <div class="ic-header">
+        <i data-lucide="wallet"></i>
+        <span>旅費總覽</span>
+      </div>
+      <div id="expense-overview">
+        <div class="eo-empty">載入中...</div>
+      </div>
+    </div>
   </div>
 
 
@@ -322,6 +333,7 @@
     </div>
   </div>
 
+  <script src="data.js"></script>
   <script src="app.js"></script>
 </body>
 

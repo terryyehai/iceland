@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img">
+  <title>Day 7 蝙蝠山 Vestrahorn：黑沙海面上的尖峰倒影</title>
+  <style>
+    .cloudline { animation: drift 40s linear infinite; }
+    .shine { animation: shimmer 6s ease-in-out infinite; }
+    @keyframes drift { from { transform: translateX(0); } to { transform: translateX(-820px); } }
+    @keyframes shimmer { 0%,100% { opacity: .35; } 50% { opacity: .7; } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <linearGradient id="d7sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1e3a8a"/>
+      <stop offset=".55" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#fda4af"/>
+    </linearGradient>
+    <linearGradient id="d7mtn" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#334155"/>
+      <stop offset="1" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#d7sky)"/>
+  <circle cx="400" cy="228" r="34" fill="#fff1f2" opacity=".95"/>
+
+  <g class="cloudline" fill="#93c5fd" opacity=".4">
+    <g>
+      <ellipse cx="180" cy="70" rx="110" ry="10"/>
+      <ellipse cx="520" cy="110" rx="140" ry="12"/>
+    </g>
+    <g transform="translate(820,0)">
+      <ellipse cx="180" cy="70" rx="110" ry="10"/>
+      <ellipse cx="520" cy="110" rx="140" ry="12"/>
+    </g>
+  </g>
+
+  <!-- 蝙蝠山群峰 -->
+  <path d="M40 262 L 170 90 L 250 200 L 330 60 L 430 210 L 520 110 L 640 262 Z" fill="url(#d7mtn)"/>
+  <path d="M40 262 L 170 90 L 214 152 L 128 262 Z" fill="#1e293b"/>
+  <path d="M330 60 L 430 210 L 366 262 L 300 130 Z" fill="#1e293b" opacity=".8"/>
+  <!-- 雪紋 -->
+  <path d="M170 90 L 190 122 L 176 130 L 158 108 Z" fill="#e2e8f0"/>
+  <path d="M330 60 L 350 96 L 336 106 L 318 82 Z" fill="#e2e8f0"/>
+  <path d="M520 110 L 538 140 L 524 148 L 508 126 Z" fill="#e2e8f0" opacity=".9"/>
+
+  <!-- 平靜潟湖與倒影 -->
+  <rect y="262" width="800" height="188" fill="#0c1a33"/>
+  <g opacity=".38" transform="translate(0,524) scale(1,-1)">
+    <path d="M40 262 L 170 90 L 250 200 L 330 60 L 430 210 L 520 110 L 640 262 Z" fill="#475569"/>
+  </g>
+  <ellipse class="shine" cx="400" cy="292" rx="200" ry="5" fill="#fda4af"/>
+  <ellipse class="shine" cx="400" cy="330" rx="120" ry="4" fill="#93c5fd" style="animation-delay:2s"/>
+
+  <!-- 黑沙洲與草叢 -->
+  <path d="M0 400 Q 200 384 420 400 Q 620 414 800 400 L 800 450 L 0 450 Z" fill="#0f172a"/>
+  <g stroke="#a16207" stroke-width="4" stroke-linecap="round" fill="none">
+    <path d="M120 402 q -4 -20 -12 -28 M120 402 q 2 -22 12 -30 M120 402 q -1 -24 2 -34"/>
+    <path d="M660 408 q -4 -18 -12 -26 M660 408 q 2 -20 12 -28 M660 408 q -1 -22 2 -30"/>
+  </g>
+
+  <!-- 攝影師剪影 -->
+  <g fill="#020617">
+    <circle cx="330" cy="382" r="8"/>
+    <rect x="323" y="390" width="14" height="24" rx="6"/>
+    <path d="M337 396 l 18 -6 l 0 6 l -18 6 Z"/>
+    <path d="M352 386 l 10 0 l 0 8 l -10 0 Z"/>
+    <path d="M355 394 l -3 20 m 6 -20 l 3 20" stroke="#020617" stroke-width="3"/>
+  </g>
+</svg>

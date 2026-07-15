@@ -1,7 +1,7 @@
 /* ===== Service Worker — 冰島自駕遊 PWA ===== */
 /* 作用：快取靜態資源，讓 App 能離線瀏覽已造訪過的頁面 */
 
-const CACHE_NAME = 'iceland-travel-v1';
+const CACHE_NAME = 'iceland-travel-v2';
 
 // 安裝時需要預先快取的核心檔案
 const ASSETS_TO_CACHE = [
@@ -10,13 +10,21 @@ const ASSETS_TO_CACHE = [
   './manifest.json',
   './puffin-icon-192.png',
   './puffin-icon-512.png',
+  './style.css',
+  './day.css',
+  './data.js',
+  './app.js',
+  './day.js',
+  // 16 個每日頁面與 SVG 插畫（離線也能看整份行程）
+  ...Array.from({ length: 16 }, (_, i) => `./day${i + 1}.html`),
+  ...Array.from({ length: 16 }, (_, i) => `./images/day${i + 1}.svg`),
   // Google Fonts
   'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
   // Leaflet 地圖函式庫
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
   // Lucide 圖標
-  'https://unpkg.com/lucide@latest'
+  'https://unpkg.com/lucide@0.462.0'
 ];
 
 // ── 安裝階段：快取靜態資源 ──

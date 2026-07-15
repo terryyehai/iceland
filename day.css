@@ -428,3 +428,523 @@ body.dark-mode .tl-card:hover {
     height: 1em;
     vertical-align: middle
 }
+
+/* ===== 新版：英雄插畫 + 橫幅整合 ===== */
+.day-hero {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    background: var(--accent, #2563eb);
+}
+
+.day-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.day-hero .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10, 15, 35, .72) 0%, rgba(10, 15, 35, .15) 45%, transparent 70%);
+    pointer-events: none;
+}
+
+.day-hero.no-img {
+    aspect-ratio: auto;
+    height: 150px;
+    background: linear-gradient(135deg, var(--accent), var(--accent));
+}
+
+.day-hero .banner-num {
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    font-size: 44px;
+    font-weight: 800;
+    color: #fff;
+    opacity: .35;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+}
+
+.day-hero .banner-info {
+    position: absolute;
+    left: 16px;
+    bottom: 14px;
+    color: #fff;
+}
+
+.day-hero .banner-info .theme {
+    font-size: 22px;
+    font-weight: 800;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, .45);
+}
+
+.day-hero .banner-info .meta {
+    font-size: 12px;
+    opacity: .92;
+    margin-top: 4px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, .45);
+}
+
+/* 頂部：回首頁鈕與打卡進度條 */
+.top .home-btn {
+    font-size: 16px;
+    margin-left: auto;
+}
+
+.day-progress {
+    position: sticky;
+    top: 60px;
+    z-index: 49;
+    height: 4px;
+    background: rgba(0, 0, 0, .07);
+}
+
+.day-progress-fill {
+    height: 100%;
+    width: 0;
+    transition: width .4s cubic-bezier(.16, 1, .3, 1);
+    border-radius: 0 2px 2px 0;
+}
+
+/* 今日行程列：打卡計數 + 收合鈕 */
+.tl-progress-text {
+    margin-left: auto;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--sub);
+    background: rgba(0, 0, 0, .05);
+    padding: 3px 10px;
+    border-radius: 12px;
+}
+
+.fold-all-btn {
+    border: 0;
+    background: #F3F4F6;
+    color: var(--navy);
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fold-all-btn .lucide {
+    width: 16px;
+    height: 16px;
+}
+
+.tl-hint {
+    padding: 0 16px 10px;
+    font-size: 11px;
+    color: var(--sub);
+}
+
+/* 打卡圓點（checkbox 化的 tl-dot） */
+.tl-check {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid var(--amber);
+    background: #fff;
+    cursor: pointer;
+    flex-shrink: 0;
+    z-index: 1;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .2s, border-color .2s, transform .15s;
+}
+
+.tl-check:active {
+    transform: scale(.85);
+}
+
+.tl-check:checked {
+    background: #10b981;
+    border-color: #10b981;
+}
+
+.tl-check:checked::after {
+    content: '✓';
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+/* 打卡完成的卡片 */
+.tl-done-badge {
+    display: none;
+    margin-left: 8px;
+    color: #10b981;
+    font-weight: 800;
+}
+
+.tl-card.done {
+    border-left-color: #10b981;
+    background: linear-gradient(0deg, rgba(16, 185, 129, .06), rgba(16, 185, 129, .06)), var(--card);
+}
+
+.tl-card.done .tl-done-badge {
+    display: inline;
+}
+
+/* 標題按鈕 + 摺疊 */
+.tl-title {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border: 0;
+    background: none;
+    padding: 0;
+    text-align: left;
+    font-family: inherit;
+    color: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    cursor: pointer;
+}
+
+.tl-caret {
+    color: var(--sub);
+    font-size: 11px;
+    transition: transform .25s;
+}
+
+.tl-card .tl-body {
+    display: block;
+    overflow: hidden;
+    max-height: 400px;
+    transition: max-height .35s cubic-bezier(.16, 1, .3, 1), opacity .3s;
+    opacity: 1;
+}
+
+.tl-card.folded .tl-body {
+    max-height: 0;
+    opacity: 0;
+}
+
+.tl-card.folded .tl-caret {
+    transform: rotate(-90deg);
+}
+
+.tl-card.folded .tl-title {
+    margin-bottom: 0;
+}
+
+.tl-card.flash {
+    animation: flashCard 1.6s ease;
+}
+
+@keyframes flashCard {
+
+    0%,
+    60% {
+        box-shadow: 0 0 0 3px #f59e0b88, var(--shadow);
+    }
+
+    100% {
+        box-shadow: var(--shadow);
+    }
+}
+
+/* 當日天氣卡 */
+.day-weather {
+    margin: 0 16px;
+    background: var(--card);
+    border-radius: var(--r);
+    box-shadow: var(--shadow);
+    padding: 14px;
+}
+
+.dw-loading {
+    font-size: 12px;
+    color: var(--sub);
+    text-align: center;
+    padding: 6px 0;
+}
+
+.dw-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.dw-icon {
+    font-size: 30px;
+}
+
+.dw-temp {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.dw-loc {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--sub);
+}
+
+.dw-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+}
+
+.dw-cell {
+    text-align: center;
+    font-size: 10px;
+    color: var(--sub);
+    background: rgba(0, 0, 0, .04);
+    border-radius: 10px;
+    padding: 8px 2px;
+    line-height: 1.7;
+}
+
+.dw-cell b {
+    color: var(--navy);
+    font-size: 12px;
+}
+
+@media (max-width: 380px) {
+    .dw-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* 記帳卡 */
+.expense-card {
+    margin: 0 16px;
+    background: var(--card);
+    border-radius: var(--r);
+    box-shadow: var(--shadow);
+    padding: 14px;
+}
+
+.exp-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.exp-form input,
+.exp-form select {
+    border: 1px solid rgba(0, 0, 0, .12);
+    border-radius: 10px;
+    padding: 9px 10px;
+    font-size: 13px;
+    font-family: inherit;
+    background: var(--cream);
+    color: var(--navy);
+    min-width: 0;
+}
+
+.exp-form button {
+    grid-column: 1 / -1;
+    border: 0;
+    background: var(--amber);
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.exp-form button:active {
+    transform: scale(.98);
+}
+
+.exp-list {
+    margin-top: 10px;
+}
+
+.exp-empty {
+    font-size: 12px;
+    color: var(--sub);
+    text-align: center;
+    padding: 8px 0;
+}
+
+.exp-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px dashed rgba(0, 0, 0, .08);
+    font-size: 12px;
+}
+
+.exp-item:last-child {
+    border-bottom: 0;
+}
+
+.exp-cat {
+    flex-shrink: 0;
+    font-weight: 700;
+}
+
+.exp-note {
+    color: var(--sub);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.exp-amt {
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.exp-del {
+    border: 0;
+    background: none;
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 4px;
+}
+
+.exp-total {
+    margin-top: 10px;
+    text-align: right;
+    font-size: 13px;
+    color: var(--navy);
+}
+
+.exp-total b {
+    color: var(--amber);
+}
+
+/* 上一天 / 下一天 */
+.day-nav-row {
+    display: flex;
+    gap: 10px;
+    margin: 20px 16px 8px;
+}
+
+.day-nav-btn {
+    flex: 1;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 12px 10px;
+    border-radius: 24px;
+    transition: transform .15s;
+}
+
+.day-nav-btn:active {
+    transform: scale(.96);
+}
+
+.day-nav-btn.prev {
+    background: #E5E7EB;
+    color: var(--navy);
+    flex: 0 0 auto;
+    min-width: 92px;
+}
+
+.day-nav-btn.next {
+    background: var(--amber);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, .3);
+}
+
+/* 深色模式（新元件） */
+body.dark-mode .day-progress {
+    background: rgba(255, 255, 255, .08);
+}
+
+body.dark-mode .tl-progress-text {
+    background: rgba(255, 255, 255, .08);
+}
+
+body.dark-mode .fold-all-btn {
+    background: #1e2d4a;
+    color: #e0e0e0;
+}
+
+body.dark-mode .tl-check {
+    background: var(--card);
+}
+
+body.dark-mode .tl-check:checked {
+    background: #10b981;
+}
+
+body.dark-mode .dw-cell {
+    background: rgba(255, 255, 255, .06);
+}
+
+body.dark-mode .exp-form input,
+body.dark-mode .exp-form select {
+    border-color: rgba(255, 255, 255, .15);
+}
+
+body.dark-mode .exp-item {
+    border-bottom-color: rgba(255, 255, 255, .1);
+}
+
+body.dark-mode .day-nav-btn.prev {
+    background: #1e2d4a;
+    color: #e0e0e0;
+}
+
+body.dark-mode #map .leaflet-tile-pane {
+    filter: brightness(.7) contrast(1.05) saturate(.8);
+}
+
+/* 大字體模式 */
+body.large-text {
+    font-size: 18px;
+}
+
+body.large-text .tl-title {
+    font-size: 17px;
+}
+
+body.large-text .tl-desc {
+    font-size: 15px;
+}
+
+body.large-text .tl-time {
+    font-size: 13px;
+}
+
+body.large-text .tip {
+    font-size: 15px;
+}
+
+/* 減少動態偏好 */
+@media (prefers-reduced-motion: reduce) {
+
+    .fade-up,
+    .tl-card .tl-body,
+    .day-progress-fill,
+    .tl-caret {
+        transition: none;
+    }
+
+    .tl-card.flash {
+        animation: none;
+    }
+}

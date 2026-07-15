@@ -4,178 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>Day 16 · 抵達溫暖的家｜冰島自駕 2026</title>
+    <meta name="description" content="冰島自駕環島 2026 Day 16：抵達溫暖的家" />
+    <meta name="theme-color" content="#10b981" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@0.462.0"></script>
     <link rel="stylesheet" href="day.css" />
     <link rel="manifest" href="./manifest.json" />
     <link rel="icon" href="./puffin-icon-192.png" type="image/png" />
     <link rel="apple-touch-icon" href="./puffin-icon-192.png" />
 </head>
-<body>
-    <!-- 頂部導覽 -->
-    <div class="top">
-        <a class="back" href="day15.html">←</a>
-        <div>
-            <div class="top-title">Day 16 · 抵達溫暖的家</div>
-            <div class="top-sub">8月16日（週日）</div>
-        </div>
-    </div>
-
-    <!-- 頂部景點大圖 -->
-    <div class="day-hero-img">
-        <img src="images/day16.png" alt="Day 16 Hero Image" onerror="this.parentElement.style.display='none';" />
-    </div>
-
-    <!-- 日橫幅 -->
-    <div class="banner" style="background:linear-gradient(135deg, #10b981, #10b981dd)">
-        <div class="banner-num">16</div>
-        <div class="banner-info">
-            <div class="theme">抵達溫暖的家 🏡</div>
-            <div class="meta">8月16日（週日）・🇭🇰 香港轉機</div>
-        </div>
-    </div>
-
-    <!-- 行程時間軸 -->
-    <div class="sec-head">
-        <div class="dot" style="background:#10b981"></div>
-        <h2><i data-lucide="map-pin"></i> 今日行程</h2>
-    </div>
-    <div class="timeline">
-
-        <div class="tl-item">
-            <div class="tl-line">
-                <div class="tl-dot"></div>
-                <div class="tl-bar"></div>
-            </div>
-            <div class="tl-card">
-                <div class="tl-time-row">
-                    <div class="tl-time">🛬 15:45</div>
-                    <div style="display:flex;gap:8px;">
-                        <button class="nav-btn play-btn" onclick="speakText('抵達香港轉機', '⚠️ 抵達香港 HKG，轉機時間僅 1 小時 45 分鐘，請留意轉機標示快速移動至下個登機門。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
-                        <a href="https://www.google.com/maps/search/?api=1&query=%E6%8A%B5%E9%81%94%E9%A6%99%E6%B8%AF%E8%BD%89%E6%A9%9F%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
-                    </div>
-                </div>
-                <div class="tl-title">抵達香港轉機</div>
-                <div class="tl-desc">⚠️ 抵達香港 HKG，轉機時間僅 1 小時 45 分鐘，請留意轉機標示快速移動至下個登機門。</div>
-                <div class="tl-tags"><span class="tl-tag">🇭🇰 香港轉機</span><span class="tl-tag">🏃 緊湊</span></div>
-            </div>
-        </div>
-
-        <div class="tl-item">
-            <div class="tl-line">
-                <div class="tl-dot"></div>
-                <div class="tl-bar"></div>
-            </div>
-            <div class="tl-card">
-                <div class="tl-time-row">
-                    <div class="tl-time">🛫 17:30</div>
-                    <div style="display:flex;gap:8px;">
-                        <button class="nav-btn play-btn" onclick="speakText('搭乘 CI916 飛往台北', '最後一段航程，搭乘中華航空回台。')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
-                        <a href="https://www.google.com/maps/search/?api=1&query=%E6%90%AD%E4%B9%98%20CI916%20%E9%A3%9B%E5%BE%80%E5%8F%B0%E5%8C%97%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
-                    </div>
-                </div>
-                <div class="tl-title">搭乘 CI916 飛往台北</div>
-                <div class="tl-desc">最後一段航程，搭乘中華航空回台。</div>
-                <div class="tl-tags"><span class="tl-tag">✈️ 回程</span></div>
-            </div>
-        </div>
-
-        <div class="tl-item">
-            <div class="tl-line">
-                <div class="tl-dot"></div>
-                
-            </div>
-            <div class="tl-card">
-                <div class="tl-time-row">
-                    <div class="tl-time">🛬 19:25</div>
-                    <div style="display:flex;gap:8px;">
-                        <button class="nav-btn play-btn" onclick="speakText('抵達台北 (TPE)', '順利抵達台灣，領取行李，結束這趟精彩的 16 天冰島大環島之旅！🎉')" title="播放景點導覽"><i data-lucide="volume-2"></i> 導覽</button>
-                        <a href="https://www.google.com/maps/search/?api=1&query=%E6%8A%B5%E9%81%94%E5%8F%B0%E5%8C%97%20(TPE)%20Iceland" target="_blank" class="nav-btn"><i data-lucide="navigation"></i> 導航</a>
-                    </div>
-                </div>
-                <div class="tl-title">抵達台北 (TPE)</div>
-                <div class="tl-desc">順利抵達台灣，領取行李，結束這趟精彩的 16 天冰島大環島之旅！🎉</div>
-                <div class="tl-tags"><span class="tl-tag">🇹🇼 抵達台灣</span></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 住宿資訊 -->
-    <div class="sec-head">
-        <div class="dot" style="background:#0D9488"></div>
-        <h2><i data-lucide="bed"></i> 今晚住宿</h2>
-    </div>
-    <div class="hotel-card">
-        <div class="icon">🏨</div>
-        <div>
-            <div class="name">— 無住宿 —</div>
-            <div class="desc">🏡 溫暖的家</div>
-        </div>
-    </div>
-
-    <!-- 地圖 -->
-    <div class="sec-head">
-        <div class="dot" style="background:#3B82F6"></div>
-        <h2><i data-lucide="map"></i> 景點地圖</h2>
-    </div>
-    <div id="map"></div>
-
-    <!-- 提示 -->
-    <div class="sec-head">
-        <div class="dot" style="background:#F87171"></div>
-        <h2><i data-lucide="lightbulb"></i> 今日提醒</h2>
-    </div>
-    <div class="tips">
-
-        <div class="tip"><span class="tip-ic"><i data-lucide="alert-circle"></i></span><span>回家盡快整理相片與遊記，與大家分享你在冰島看見的極光與黑沙灘！</span></div>
-    </div>
-
-    <!-- 導航按鈕 -->
-    <div class="next-day"><a href="index.html">← 回到首頁</a></div>
-
-    <script>
-        // 地圖
-        try {
-            var map = L.map('map').setView([25.07, 121.23], 5);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution:'© OSM', maxZoom:18 }).addTo(map);
-            var spots = [{"name":"TPE 機場","lat":25.079,"lng":121.234,"c":"#10b981"}];
-            spots.forEach(function(s) {
-                L.circleMarker([s.lat, s.lng], { radius:7, fillColor:s.c, color:'#fff', weight:2, fillOpacity:.9 })
-                    .addTo(map).bindPopup('<b>' + s.name + '</b>');
-            });
-        } catch(e) { document.getElementById('map').innerHTML = '<div style="height:200px;display:flex;align-items:center;justify-content:center;background:#F3F4F6;border-radius:16px;color:#6B7280;">地圖載入中...</div>'; }
-
-        // 大字體與深色模式
-        if (localStorage.getItem('darkMode') === 'true') { document.body.classList.add('dark-mode'); }
-        if (localStorage.getItem('largeText') === 'true') { document.body.classList.add('large-text'); }
-
-        // Lucide Icons
-        lucide.createIcons();
-
-        // 景點語音導覽
-        function speakText(title, desc) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); // 停止先前的播放
-                var msg = new SpeechSynthesisUtterance("即將抵達" + title + "。 " + desc);
-                msg.lang = 'zh-TW';
-                msg.rate = parseFloat(localStorage.getItem('voiceRate') || '1.0'); 
-                msg.pitch = 1.0;
-                window.speechSynthesis.speak(msg);
-            } else {
-                alert("您的瀏覽器不支援語音導覽功能。");
-            }
-        }
-
-        // 滾動動畫
-        document.addEventListener('DOMContentLoaded', () => {
-            const obs = new IntersectionObserver((entries) => {
-                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-            }, { threshold: 0.1 });
-            document.querySelectorAll('.tl-item, .hotel-card, .tips').forEach(el => { el.classList.add('fade-up'); obs.observe(el); });
-        });
-    </script>
+<body data-day="16">
+    <div id="day-root"></div>
+    <script src="data.js"></script>
+    <script src="day.js"></script>
 </body>
 </html>

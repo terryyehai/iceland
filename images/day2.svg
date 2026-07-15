@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img">
+  <title>Day 2 夢幻藍湖：乳藍色溫泉與黑熔岩</title>
+  <style>
+    .steam { animation: rise 7s ease-in infinite; opacity: 0; }
+    .steam.s2 { animation-delay: 2.3s; }
+    .steam.s3 { animation-delay: 4.6s; }
+    .ripple { animation: ripple 5s ease-in-out infinite; transform-origin: center; }
+    @keyframes rise {
+      0% { transform: translateY(0) scale(.8); opacity: 0; }
+      25% { opacity: .75; }
+      100% { transform: translateY(-130px) scale(1.5); opacity: 0; }
+    }
+    @keyframes ripple { 0%,100% { transform: scaleX(1); opacity:.7; } 50% { transform: scaleX(1.06); opacity:1; } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <linearGradient id="d2sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#93c5fd"/>
+      <stop offset="1" stop-color="#e0f2fe"/>
+    </linearGradient>
+    <linearGradient id="d2lagoon" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bae6fd"/>
+      <stop offset=".5" stop-color="#7dd3fc"/>
+      <stop offset="1" stop-color="#67e8f9"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#d2sky)"/>
+
+  <!-- 遠山 -->
+  <polygon points="0,240 140,150 300,230 460,160 640,240 800,180 800,260 0,260" fill="#94a3b8" opacity=".55"/>
+
+  <!-- 黑熔岩岸 -->
+  <path d="M0 260 Q 120 235 260 258 Q 420 282 560 252 Q 690 232 800 256 L 800 320 L 0 320 Z" fill="#1e293b"/>
+  <path d="M0 268 Q 150 250 300 268 Q 480 288 800 264 L 800 300 L 0 300 Z" fill="#0f172a" opacity=".6"/>
+
+  <!-- 藍湖 -->
+  <rect y="300" width="800" height="150" fill="url(#d2lagoon)"/>
+  <ellipse class="ripple" cx="400" cy="330" rx="330" ry="14" fill="#e0f7fa" opacity=".8"/>
+  <ellipse class="ripple" cx="380" cy="375" rx="280" ry="12" fill="#f0fdff" opacity=".7" style="animation-delay:1.6s"/>
+  <ellipse class="ripple" cx="430" cy="418" rx="330" ry="12" fill="#e0f7fa" opacity=".6" style="animation-delay:3.1s"/>
+
+  <!-- 岩石小島 -->
+  <path d="M70 340 q 30 -30 66 -6 q 20 14 -4 24 q -50 14 -62 -18" fill="#334155"/>
+  <path d="M640 380 q 36 -28 80 -4 q 22 14 -8 26 q -58 14 -72 -22" fill="#334155"/>
+
+  <!-- 蒸氣 -->
+  <g fill="#ffffff">
+    <g class="steam">
+      <ellipse cx="240" cy="300" rx="34" ry="18"/>
+      <ellipse cx="270" cy="285" rx="24" ry="13"/>
+    </g>
+    <g class="steam s2">
+      <ellipse cx="470" cy="310" rx="40" ry="20"/>
+      <ellipse cx="505" cy="292" rx="26" ry="14"/>
+    </g>
+    <g class="steam s3">
+      <ellipse cx="620" cy="305" rx="30" ry="16"/>
+      <ellipse cx="645" cy="290" rx="20" ry="11"/>
+    </g>
+  </g>
+
+  <!-- 泡湯的人 -->
+  <g>
+    <circle cx="330" cy="352" r="11" fill="#fcd9b8"/>
+    <path d="M318 362 q 12 10 24 0 l 0 8 q -12 8 -24 0 Z" fill="#0ea5e9" opacity=".55"/>
+    <circle cx="360" cy="358" r="10" fill="#f3c39d"/>
+    <path d="M349 367 q 11 9 22 0 l 0 8 q -11 7 -22 0 Z" fill="#0ea5e9" opacity=".55"/>
+  </g>
+
+  <!-- 白色矽泥面膜杯 -->
+  <circle cx="330" cy="349" r="4.5" fill="#f8fafc" opacity=".9"/>
+</svg>

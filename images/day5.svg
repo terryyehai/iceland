@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img">
+  <title>Day 5 西人島：海鸚、渡輪與火山斷崖</title>
+  <style>
+    .wave { animation: waveMove 7s ease-in-out infinite; }
+    .wave.w2 { animation-delay: 1.4s; }
+    .ferry { animation: rock 6s ease-in-out infinite; transform-origin: 560px 330px; }
+    .puffinHead { animation: peck 6s ease-in-out infinite; transform-origin: 205px 235px; }
+    @keyframes waveMove { 0%,100% { transform: translateX(0); } 50% { transform: translateX(-40px); } }
+    @keyframes rock { 0%,100% { transform: rotate(-1.4deg) translateY(0); } 50% { transform: rotate(1.4deg) translateY(-6px); } }
+    @keyframes peck { 0%, 82%, 100% { transform: rotate(0); } 88% { transform: rotate(9deg); } 94% { transform: rotate(-4deg); } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <linearGradient id="d5sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#60a5fa"/>
+      <stop offset="1" stop-color="#dbeafe"/>
+    </linearGradient>
+    <linearGradient id="d5sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0891b2"/>
+      <stop offset="1" stop-color="#155e75"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#d5sky)"/>
+  <circle cx="700" cy="70" r="34" fill="#fef9c3"/>
+  <ellipse cx="480" cy="90" rx="80" ry="16" fill="#ffffff" opacity=".8"/>
+  <ellipse cx="620" cy="130" rx="60" ry="12" fill="#ffffff" opacity=".6"/>
+
+  <!-- 遠方火山島 Heimaey -->
+  <path d="M330 260 L 420 170 Q 440 156 470 168 L 560 240 L 640 200 L 740 262 L 330 262 Z" fill="#475569"/>
+  <path d="M418 176 L 446 158 L 470 176 L 448 190 Z" fill="#dc2626" opacity=".75"/>
+
+  <!-- 大海 -->
+  <rect y="260" width="800" height="190" fill="url(#d5sea)"/>
+  <g class="wave" fill="none" stroke="#67e8f9" stroke-width="4" stroke-linecap="round" opacity=".7">
+    <path d="M-40 300 Q 20 292 80 300 T 200 300 T 320 300 T 440 300 T 560 300 T 680 300 T 840 300"/>
+  </g>
+  <g class="wave w2" fill="none" stroke="#a5f3fc" stroke-width="3" stroke-linecap="round" opacity=".5">
+    <path d="M-40 350 Q 20 342 80 350 T 200 350 T 320 350 T 440 350 T 560 350 T 680 350 T 840 350"/>
+  </g>
+
+  <!-- 渡輪 Herjólfur -->
+  <g class="ferry">
+    <path d="M470 322 L 660 322 L 636 356 L 492 356 Z" fill="#1e3a8a"/>
+    <rect x="500" y="292" width="130" height="32" rx="6" fill="#f8fafc"/>
+    <rect x="520" y="270" width="70" height="24" rx="5" fill="#e2e8f0"/>
+    <g fill="#38bdf8">
+      <circle cx="516" cy="308" r="5"/><circle cx="538" cy="308" r="5"/><circle cx="560" cy="308" r="5"/>
+      <circle cx="582" cy="308" r="5"/><circle cx="604" cy="308" r="5"/>
+    </g>
+    <rect x="596" y="256" width="12" height="22" rx="3" fill="#dc2626"/>
+  </g>
+
+  <!-- 前景草崖與海鸚 -->
+  <path d="M0 450 L 0 260 Q 60 240 130 254 Q 240 274 300 330 Q 330 380 320 450 Z" fill="#15803d"/>
+  <path d="M0 450 L 0 320 Q 80 310 160 350 Q 230 390 236 450 Z" fill="#166534"/>
+
+  <!-- 海鸚 Puffin -->
+  <g>
+    <!-- 身體 -->
+    <ellipse cx="178" cy="280" rx="46" ry="56" fill="#0f172a"/>
+    <ellipse cx="186" cy="292" rx="32" ry="42" fill="#f8fafc"/>
+    <!-- 頭 -->
+    <g class="puffinHead">
+      <circle cx="196" cy="232" r="34" fill="#0f172a"/>
+      <circle cx="204" cy="236" r="24" fill="#f8fafc"/>
+      <!-- 喙 -->
+      <path d="M226 226 Q 262 224 268 240 Q 258 258 232 252 Q 224 240 226 226 Z" fill="#ea580c"/>
+      <path d="M226 226 Q 244 224 252 230 L 244 238 Q 232 236 226 232 Z" fill="#facc15"/>
+      <!-- 眼 -->
+      <circle cx="204" cy="228" r="4.6" fill="#0f172a"/>
+      <path d="M194 220 L 210 216" stroke="#0f172a" stroke-width="2.4" stroke-linecap="round"/>
+    </g>
+    <!-- 腳 -->
+    <path d="M162 332 l -8 16 m 8 -16 l 2 18 m 26 -16 l -4 16 m 4 -16 l 8 16" stroke="#ea580c" stroke-width="6" stroke-linecap="round"/>
+    <!-- 翅膀 -->
+    <path d="M140 270 q -18 26 4 48 q 14 -8 16 -34 q -6 -14 -20 -14" fill="#1e293b"/>
+  </g>
+</svg>

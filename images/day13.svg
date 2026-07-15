@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img">
+  <title>Day 13 斯奈山半島：教會山 Kirkjufell 與極光、海豹</title>
+  <style>
+    .aurora { animation: wave1 9s ease-in-out infinite; }
+    .aurora.a2 { animation: wave2 11s ease-in-out infinite; }
+    .falls { animation: flow 1.5s linear infinite; }
+    .seal { animation: bob 6s ease-in-out infinite; transform-origin: 660px 400px; }
+    @keyframes wave1 { 0%,100% { transform: translateX(0) skewX(0); opacity:.7; } 50% { transform: translateX(30px) skewX(-6deg); opacity:.95; } }
+    @keyframes wave2 { 0%,100% { transform: translateX(0) skewX(0); opacity:.5; } 50% { transform: translateX(-36px) skewX(5deg); opacity:.8; } }
+    @keyframes flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -34; } }
+    @keyframes bob { 0%,100% { transform: rotate(0); } 50% { transform: rotate(-3deg) translateY(-3px); } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <linearGradient id="d13sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset=".7" stop-color="#1e3a5f"/>
+      <stop offset="1" stop-color="#0e7490"/>
+    </linearGradient>
+    <linearGradient id="d13aur" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#34d399" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#34d399" stop-opacity=".85"/>
+      <stop offset="1" stop-color="#a7f3d0" stop-opacity=".2"/>
+    </linearGradient>
+    <linearGradient id="d13aur2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#818cf8" stop-opacity="0"/>
+      <stop offset=".6" stop-color="#a78bfa" stop-opacity=".7"/>
+      <stop offset="1" stop-color="#c4b5fd" stop-opacity=".15"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#d13sky)"/>
+
+  <!-- 極光 -->
+  <path class="aurora" d="M-20 40 Q 120 10 240 60 Q 380 116 520 70 Q 660 24 820 70 L 820 150 Q 660 104 520 150 Q 380 196 240 140 Q 120 90 -20 120 Z" fill="url(#d13aur)"/>
+  <path class="aurora a2" d="M-20 90 Q 160 60 320 110 Q 500 166 680 110 L 820 90 L 820 190 Q 640 226 460 176 Q 260 126 -20 176 Z" fill="url(#d13aur2)"/>
+
+  <!-- 星 -->
+  <g fill="#e0e7ff" opacity=".9">
+    <circle cx="70" cy="50" r="2"/><circle cx="720" cy="40" r="2.2"/><circle cx="620" cy="200" r="1.8"/><circle cx="120" cy="200" r="1.6"/>
+  </g>
+
+  <!-- 教會山（尖帽形） -->
+  <path d="M270 350 Q 320 220 384 128 Q 400 106 416 128 Q 480 220 530 350 Z" fill="#1e293b"/>
+  <path d="M270 350 Q 320 220 384 128 Q 396 112 402 118 Q 380 200 356 350 Z" fill="#0f172a"/>
+  <!-- 山腰雪紋 -->
+  <path d="M384 132 Q 400 110 414 130 L 404 158 Q 398 148 392 156 Z" fill="#cbd5e1"/>
+  <path d="M356 196 q 14 -10 24 2 q -8 12 -24 8 Z" fill="#94a3b8" opacity=".6"/>
+
+  <!-- 海面 -->
+  <rect y="350" width="800" height="100" fill="#082f49"/>
+  <path d="M270 350 Q 400 350 530 350 L 520 372 Q 400 384 282 372 Z" fill="#173a5e" opacity=".7"/>
+  <ellipse cx="400" cy="382" rx="130" ry="6" fill="#34d399" opacity=".3"/>
+
+  <!-- 教會山瀑布（前景左） -->
+  <g>
+    <path d="M0 450 L 0 300 Q 70 288 130 306 Q 180 322 200 360 L 210 450 Z" fill="#1c2a3f"/>
+    <g stroke="#bae6fd" stroke-width="8" fill="none" stroke-linecap="round" opacity=".9">
+      <path class="falls" d="M92 310 Q 94 350 88 396" stroke-dasharray="16 10"/>
+      <path class="falls" d="M114 314 Q 116 354 114 400" stroke-dasharray="16 10" style="animation-delay:.4s"/>
+    </g>
+    <ellipse cx="102" cy="404" rx="52" ry="12" fill="#e0f2fe" opacity=".7"/>
+  </g>
+
+  <!-- 海豹 -->
+  <g class="seal">
+    <path d="M600 404 Q 640 376 690 388 Q 724 396 738 384 Q 744 398 724 408 Q 680 424 630 416 Q 606 412 600 404 Z" fill="#64748b"/>
+    <circle cx="614" cy="396" r="13" fill="#64748b"/>
+    <circle cx="609" cy="392" r="2.2" fill="#0f172a"/>
+    <path d="M600 400 q -5 1 -8 4" stroke="#0f172a" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M736 384 l 14 -10 l -4 16 Z" fill="#475569"/>
+    <g fill="#94a3b8" opacity=".7"><circle cx="640" cy="398" r="2"/><circle cx="656" cy="402" r="2"/><circle cx="672" cy="398" r="2"/></g>
+  </g>
+</svg>

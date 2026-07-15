@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img">
+  <title>Day 3 黃金圈：史托克間歇泉噴發與黃金瀑布</title>
+  <style>
+    .jet { animation: erupt 5s cubic-bezier(.2,.8,.3,1) infinite; transform-origin: 240px 330px; }
+    .jetSteam { animation: puff 5s ease-out infinite; transform-origin: 240px 200px; opacity:0; }
+    .falls { animation: flow 1.6s linear infinite; }
+    @keyframes erupt {
+      0%, 12% { transform: scaleY(0); }
+      22% { transform: scaleY(1.05); }
+      30% { transform: scaleY(.95); }
+      55% { transform: scaleY(1); }
+      75%, 100% { transform: scaleY(0); }
+    }
+    @keyframes puff {
+      0%, 18% { opacity: 0; transform: translateY(10px) scale(.7); }
+      35% { opacity: .8; }
+      70% { opacity: .3; }
+      100% { opacity: 0; transform: translateY(-60px) scale(1.4); }
+    }
+    @keyframes flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -36; } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <linearGradient id="d3sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7dd3fc"/>
+      <stop offset="1" stop-color="#fef9c3"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#d3sky)"/>
+  <circle cx="680" cy="80" r="42" fill="#fde68a"/>
+
+  <!-- 遠山 -->
+  <polygon points="0,220 180,130 360,215 540,140 700,210 800,170 800,240 0,240" fill="#a5b4fc" opacity=".5"/>
+
+  <!-- 地面 -->
+  <path d="M0 240 Q 200 220 420 244 Q 620 264 800 240 L 800 450 L 0 450 Z" fill="#65a30d"/>
+  <path d="M0 300 Q 240 280 480 306 Q 660 322 800 300 L 800 450 L 0 450 Z" fill="#4d7c0f"/>
+
+  <!-- 間歇泉水柱 -->
+  <g class="jet">
+    <path d="M228 330 Q 226 240 214 180 Q 232 150 240 140 Q 248 150 266 180 Q 254 240 252 330 Z" fill="#e0f2fe"/>
+    <path d="M234 330 Q 234 250 228 195 Q 238 165 240 158 Q 242 165 252 195 Q 246 250 246 330 Z" fill="#ffffff"/>
+  </g>
+  <g class="jetSteam" fill="#f0f9ff">
+    <ellipse cx="222" cy="170" rx="30" ry="18"/>
+    <ellipse cx="258" cy="150" rx="26" ry="15"/>
+    <ellipse cx="240" cy="128" rx="20" ry="12"/>
+  </g>
+  <!-- 泉眼 -->
+  <ellipse cx="240" cy="332" rx="52" ry="12" fill="#93c5fd"/>
+  <ellipse cx="240" cy="330" rx="40" ry="8" fill="#bfdbfe"/>
+
+  <!-- 黃金瀑布（右側峽谷） -->
+  <g>
+    <path d="M560 244 L 800 244 L 800 450 L 640 450 Q 636 380 620 340 Q 600 290 560 268 Z" fill="#78716c"/>
+    <path d="M620 244 L 800 244 L 800 450 L 690 450 Q 686 380 672 342 Q 654 292 620 270 Z" fill="#57534e"/>
+    <!-- 兩層水簾 -->
+    <g stroke="#e0f2fe" stroke-width="9" fill="none" stroke-linecap="round">
+      <path class="falls" d="M690 250 L 690 306" stroke-dasharray="14 10"/>
+      <path class="falls" d="M712 250 L 712 306" stroke-dasharray="14 10" style="animation-delay:.4s"/>
+      <path class="falls" d="M734 250 L 734 306" stroke-dasharray="14 10" style="animation-delay:.8s"/>
+      <path class="falls" d="M672 322 L 656 388" stroke-dasharray="14 10" style="animation-delay:.2s"/>
+      <path class="falls" d="M694 322 L 682 392" stroke-dasharray="14 10" style="animation-delay:.6s"/>
+      <path class="falls" d="M716 324 L 708 394" stroke-dasharray="14 10" style="animation-delay:1s"/>
+    </g>
+    <path d="M620 306 Q 700 322 800 312 L 800 330 Q 700 340 616 322 Z" fill="#bae6fd"/>
+    <!-- 水霧 -->
+    <ellipse cx="672" cy="402" rx="60" ry="16" fill="#f0f9ff" opacity=".8"/>
+    <path d="M600 450 Q 700 385 800 402 L 800 450 Z" fill="#7dd3fc"/>
+  </g>
+
+  <!-- 圍觀小人 -->
+  <g>
+    <circle cx="330" cy="352" r="7" fill="#fcd9b8"/>
+    <rect x="323" y="359" width="14" height="22" rx="6" fill="#dc2626"/>
+    <circle cx="366" cy="356" r="7" fill="#f3c39d"/>
+    <rect x="359" y="363" width="14" height="20" rx="6" fill="#2563eb"/>
+  </g>
+</svg>
