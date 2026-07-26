@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>冰島空拍飛行助手｜官方禁限航圖與 GPS 風況</title>
+  <meta name="description" content="冰島空拍規劃工具：官方禁限航圖層、GPS 定位風速、開放類別規則、保護區限制與有條件空拍地點。" />
+  <meta name="theme-color" content="#123b3a" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" href="./puffin-icon-192.png" type="image/png" />
+  <link rel="apple-touch-icon" href="./puffin-icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/lucide@0.462.0"></script>
+  <link rel="stylesheet" href="drone.css?v=20260726" />
+</head>
+
+<body>
+  <header class="drone-header">
+    <a class="icon-button" href="index.html" aria-label="返回首頁" title="返回首頁"><i data-lucide="arrow-left"></i></a>
+    <div class="brand-block">
+      <span class="eyebrow">ICELAND FLIGHT DESK</span>
+      <h1>空拍飛行助手</h1>
+    </div>
+    <a class="official-button" href="https://kort.gis.is/mapview/?app=dronar" target="_blank" rel="noopener">
+      <i data-lucide="external-link"></i><span>官方地圖</span>
+    </a>
+  </header>
+
+  <main>
+    <section class="map-workspace" aria-labelledby="map-title">
+      <div class="map-intro">
+        <div>
+          <span class="live-kicker"><span class="pulse"></span> 官方圖層即時載入</span>
+          <h2 id="map-title">先定位，再逐項確認</h2>
+          <p>地圖疊加冰島交通運輸局常設及臨時禁限航資料。GPS 判讀只是規劃輔助，不構成飛行許可。</p>
+        </div>
+        <button class="locate-button" id="locate-button" type="button">
+          <i data-lucide="locate-fixed"></i>
+          <span>使用我的位置</span>
+        </button>
+      </div>
+
+      <div class="map-shell">
+        <div id="drone-map" role="application" aria-label="冰島無人機官方禁限航互動地圖"></div>
+        <div class="map-legend" aria-label="地圖圖例">
+          <span><i class="legend-swatch permanent"></i>官方限制區</span>
+          <span><i class="legend-swatch temporary"></i>臨時限制</span>
+          <span><i class="legend-swatch place"></i>有條件地點</span>
+        </div>
+        <button class="map-fullscreen" id="map-fullscreen" type="button" aria-label="切換地圖全螢幕" title="切換全螢幕">
+          <i data-lucide="maximize"></i>
+        </button>
+      </div>
+
+      <div class="flight-panel" id="flight-panel" aria-live="polite">
+        <div class="flight-status neutral" id="flight-status">
+          <i data-lucide="navigation"></i>
+          <div><span>尚未定位</span><small>點選「使用我的位置」檢查所在區域與風況</small></div>
+        </div>
+        <div class="conditions-grid">
+          <div class="condition"><span>持續風速</span><strong id="wind-speed">--</strong><small>m/s</small></div>
+          <div class="condition"><span>陣風</span><strong id="wind-gust">--</strong><small>m/s</small></div>
+          <div class="condition"><span>風向</span><strong id="wind-direction">--</strong><small id="wind-bearing">度</small></div>
+          <div class="condition"><span>定位精度</span><strong id="gps-accuracy">--</strong><small>公尺</small></div>
+        </div>
+        <div class="location-meta">
+          <span id="coordinates">GPS 座標尚未取得</span>
+          <span id="weather-time">風況尚未更新</span>
+        </div>
+        <p class="weather-disclosure">風況為 Open-Meteo 定位點模型資料；起飛前仍須核對冰島氣象局航空天氣，並遵守機型手冊的抗風限制。</p>
+      </div>
+    </section>
+
+    <section class="content-section preflight-section" aria-labelledby="preflight-title">
+      <div class="section-heading">
+        <span class="section-number">01</span>
+        <div><span class="eyebrow">BEFORE TAKEOFF</span><h2 id="preflight-title">起飛前六項確認</h2></div>
+      </div>
+      <div class="check-grid" id="preflight-checks">
+        <label class="check-item"><input type="checkbox" data-check="map"><span><b>官方地圖</b><small>常設與臨時限制皆已檢查</small></span></label>
+        <label class="check-item"><input type="checkbox" data-check="permission"><span><b>場地許可</b><small>地主／管理機關同意且無現場禁令</small></span></label>
+        <label class="check-item"><input type="checkbox" data-check="weather"><span><b>天氣與能見度</b><small>風速、陣風、降水符合機型限制</small></span></label>
+        <label class="check-item"><input type="checkbox" data-check="people"><span><b>人群與野生動物</b><small>保持法定距離，不飛越人群、不干擾動物</small></span></label>
+        <label class="check-item"><input type="checkbox" data-check="pilot"><span><b>註冊與資格</b><small>操作者編號已標示，攜帶所需證明</small></span></label>
+        <label class="check-item"><input type="checkbox" data-check="aircraft"><span><b>機體與返航</b><small>電量、螺旋槳、Home Point 與失聯程序</small></span></label>
+      </div>
+      <div class="check-progress"><div id="check-progress-bar"></div><span id="check-progress-text">0 / 6 已確認</span></div>
+    </section>
+
+    <section class="content-section" aria-labelledby="rules-title">
+      <div class="section-heading">
+        <span class="section-number">02</span>
+        <div><span class="eyebrow">OPEN CATEGORY</span><h2 id="rules-title">冰島空拍規則重點</h2></div>
+      </div>
+      <div class="rule-banner">
+        <div><strong>120 m</strong><span>離地最高高度</span></div>
+        <div><strong>VLOS</strong><span>全程保持目視</span></div>
+        <div><strong>16+</strong><span>一般最低年齡</span></div>
+        <div><strong>0</strong><span>不得飛越人群</span></div>
+      </div>
+      <div class="category-tabs" role="tablist" aria-label="無人機開放類別">
+        <button class="category-tab active" type="button" data-tab="a1" role="tab" aria-selected="true">A1 輕型</button>
+        <button class="category-tab" type="button" data-tab="a2" role="tab" aria-selected="false">A2 近人</button>
+        <button class="category-tab" type="button" data-tab="a3" role="tab" aria-selected="false">A3 遠離</button>
+      </div>
+      <div class="category-panel" id="category-panel"></div>
+      <div class="rules-grid">
+        <article><i data-lucide="badge-check"></i><h3>註冊與測驗</h3><p>歐洲操作者只在一個 EASA 國家註冊。冰島居民與歐洲以外旅客可在 flydrone.is 註冊，有效 5 年；A1/A3 為線上測驗，A2 另有考試要求。</p></article>
+        <article><i data-lucide="scan-eye"></i><h3>人員與隱私</h3><p>不得飛越人群。接近住宅或有人停留處，仍受財產權、私人生活與個資保護規範；不能只以地圖「無紅區」判斷。</p></article>
+        <article><i data-lucide="landmark"></i><h3>敏感設施</h3><p>未經所有人或管理者許可，不得在電廠、國會、總統官邸、部會、大使館、警局、監獄及醫院 150 m 內飛行。</p></article>
+        <article><i data-lucide="plane"></i><h3>機場附近</h3><p>機場或機場區域須取得營運者許可；表定航班機場周邊禁限區以官方 Drónakort、AIP 與機場營運者申請規定為準。</p></article>
+        <article><i data-lucide="shield-check"></i><h3>責任保險</h3><p>起飛重量超過 20 kg，或在 A2、特定類別、認證類別操作，須投保並維持可賠付第三人的責任保險。</p></article>
+        <article><i data-lucide="moon-star"></i><h3>夜間飛行</h3><p>夜航仍須全程看見無人機（VLOS），機體必須配備燈光，並依法使用綠色閃爍燈。</p></article>
+      </div>
+      <p class="source-stamp">依據 Samgöngustofa／Ísland.is，資料查核：2026-07-26。實際規則以官方最新公告為準。</p>
+    </section>
+
+    <section class="content-section protected-section" aria-labelledby="protected-title">
+      <div class="section-heading">
+        <span class="section-number">03</span>
+        <div><span class="eyebrow">PROTECTED AREAS</span><h2 id="protected-title">熱門景點限制</h2></div>
+      </div>
+      <div class="restriction-callout"><i data-lucide="ban"></i><p><strong>2026 年新制：</strong>下列熱門保護區的休閒空拍並非一般可飛。標示「全年」者僅核發指定商業用途許可；季節區在限制期內亦同。</p></div>
+      <div class="restriction-columns">
+        <article>
+          <span class="status-pill blocked">全年限制</span>
+          <h3>休閒空拍不核發許可</h3>
+          <p>Geysir、Gullfoss、Skógafoss、Dyrhólaey、Goðafoss、Mývatn／Laxá、Stapa／Hellnar、Látrabjarg、Háifoss、Gjáin 等。</p>
+        </article>
+        <article>
+          <span class="status-pill seasonal">5/1–9/15</span>
+          <h3>限制期僅指定商業用途</h3>
+          <p>Dimmuborgir、Dynjandi、Hornstrandir、Ingólfshöfði、Snæfellsjökull 國家公園、Þjórsárver 等；限制期外仍須申請。</p>
+        </article>
+        <article>
+          <span class="status-pill seasonal">15/6–15/9</span>
+          <h3>高地季節限制</h3>
+          <p>Friðland að Fjallabaki 在此期間僅處理指定商業用途；休閒用途不能把「地處偏遠」視為可飛。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-section" aria-labelledby="places-title">
+      <div class="section-heading">
+        <span class="section-number">04</span>
+        <div><span class="eyebrow">CONDITIONAL LOCATIONS</span><h2 id="places-title">有條件空拍地點</h2></div>
+      </div>
+      <p class="section-lead">這些是官方管理頁明列休閒空拍條件、且具拍攝價值的區域，不是「保證可飛」清單。抵達後仍要重查地圖、公告、天氣、人流與野生動物。</p>
+      <div class="place-grid" id="place-grid"></div>
+    </section>
+
+    <section class="content-section sources-section" aria-labelledby="sources-title">
+      <div class="section-heading">
+        <span class="section-number">05</span>
+        <div><span class="eyebrow">OFFICIAL SOURCES</span><h2 id="sources-title">官方查核入口</h2></div>
+      </div>
+      <div class="source-grid">
+        <a href="https://kort.gis.is/mapview/?app=dronar" target="_blank" rel="noopener"><i data-lucide="map"></i><span><b>Drónakort Ísland</b><small>即時禁限航圖與臨時區域</small></span><i data-lucide="external-link"></i></a>
+        <a href="https://island.is/dronareglur" target="_blank" rel="noopener"><i data-lucide="book-open"></i><span><b>Samgöngustofa 空拍規則</b><small>類別、註冊與資格官方說明</small></span><i data-lucide="external-link"></i></a>
+        <a href="https://www.nattura.is/stofnunin/reglur-um-notkun-drona" target="_blank" rel="noopener"><i data-lucide="trees"></i><span><b>保護區空拍規則</b><small>2026 地區與季節限制清單</small></span><i data-lucide="external-link"></i></a>
+        <a href="https://www.vatnajokulsthjodgardur.is/en/thenationalpark/drone-rules" target="_blank" rel="noopener"><i data-lucide="mountain-snow"></i><span><b>瓦特納國家公園</b><small>分區、季節與時段細則</small></span><i data-lucide="external-link"></i></a>
+        <a href="https://www.thingvellir.is/en/administration/licensing/droneflying-for-personal-use/" target="_blank" rel="noopener"><i data-lucide="clock-3"></i><span><b>辛格瓦勒國家公園</b><small>休閒飛行時段與區域</small></span><i data-lucide="external-link"></i></a>
+        <a href="https://en.vedur.is/weather/aviation/" target="_blank" rel="noopener"><i data-lucide="wind"></i><span><b>冰島氣象局航空天氣</b><small>起飛前核對警報與飛行天氣</small></span><i data-lucide="external-link"></i></a>
+      </div>
+      <div class="legal-note"><i data-lucide="triangle-alert"></i><p>本頁是旅程規劃工具，不是航管核准或法律意見。官方圖層註明資料仍在開發；臨時限制、NOTAM、管理者現場指示與較嚴格的特定地點規則，皆優先於本頁摘要。</p></div>
+    </section>
+  </main>
+
+  <nav class="drone-nav" aria-label="空拍頁導覽">
+    <a href="index.html"><i data-lucide="home"></i><span>首頁</span></a>
+    <a class="active" href="#map-title"><i data-lucide="map"></i><span>空域</span></a>
+    <a href="#preflight-title"><i data-lucide="list-checks"></i><span>檢查</span></a>
+    <a href="#rules-title"><i data-lucide="book-open-check"></i><span>規則</span></a>
+    <a href="#places-title"><i data-lucide="aperture"></i><span>地點</span></a>
+  </nav>
+
+  <script src="drone.js?v=20260726"></script>
+</body>
+
+</html>

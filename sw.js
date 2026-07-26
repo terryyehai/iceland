@@ -1,7 +1,7 @@
 /* ===== Service Worker — 冰島自駕遊 PWA ===== */
 /* 作用：快取靜態資源，讓 App 能離線瀏覽已造訪過的頁面 */
 
-const CACHE_NAME = 'iceland-travel-v6';
+const CACHE_NAME = 'iceland-travel-v8';
 
 // 安裝時需要預先快取的核心檔案
 const ASSETS_TO_CACHE = [
@@ -15,6 +15,9 @@ const ASSETS_TO_CACHE = [
   './data.js',
   './app.js',
   './day.js',
+  './drone.html',
+  './drone.css',
+  './drone.js',
   // 16 個每日頁面與 SVG 插畫（離線也能看整份行程）
   ...Array.from({ length: 16 }, (_, i) => `./day${i + 1}.html`),
   ...Array.from({ length: 16 }, (_, i) => `./images/day${i + 1}.svg`),
@@ -63,8 +66,8 @@ self.addEventListener('fetch', (event) => {
   // 只攔截 GET 請求
   if (event.request.method !== 'GET') return;
 
-  // 天氣 API 等第三方 → Network First（優先取得最新資料）
-  if (event.request.url.includes('api.open-meteo.com')) {
+  // 天氣與官方禁限航資料 → Network First（優先取得最新資料）
+  if (event.request.url.includes('api.open-meteo.com') || event.request.url.includes('gis.natt.is/geoserver/')) {
     event.respondWith(
       fetch(event.request)
         .then((response) => {

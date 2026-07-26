@@ -6,6 +6,14 @@
   "display": "standalone",
   "background_color": "#1a1a2e",
   "theme_color": "#2563eb",
+  "shortcuts": [
+    {
+      "name": "空拍飛行助手",
+      "short_name": "空拍助手",
+      "description": "開啟官方禁限航圖、GPS 與定位點風況",
+      "url": "./drone.html"
+    }
+  ],
   "icons": [
     {
       "src": "./puffin-icon-192.png",
