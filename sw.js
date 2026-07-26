@@ -1,7 +1,7 @@
 /* ===== Service Worker — 冰島自駕遊 PWA ===== */
 /* 作用：快取靜態資源，讓 App 能離線瀏覽已造訪過的頁面 */
 
-const CACHE_NAME = 'iceland-travel-v10';
+const CACHE_NAME = 'iceland-travel-v11';
 
 // 安裝時需要預先快取的核心檔案
 const ASSETS_TO_CACHE = [

@@ -521,33 +521,13 @@ function initScrollAnim() {
     });
 }
 
-// ── 深色模式 ──
+// ── 深色模式：預設關閉，不再依系統偏好自動開啟，只依使用者手動設定 ──
 function initDarkMode() {
-    // 檢查 LocalStorage 或是系統偏好 (prefers-color-scheme)
-    const saved = localStorage.getItem('darkMode');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    // 如果有儲存設定優先，沒有的話依系統
-    const shouldBeDark = saved === 'true' || (saved === null && prefersDark);
-
-    if (shouldBeDark) {
-        document.body.classList.add('dark-mode');
-        const toggle = document.getElementById('dark-toggle');
-        if (toggle) toggle.checked = true;
-    }
-
-    // 監聽系統主題改變
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-        if (localStorage.getItem('darkMode') === null) {
-            if (e.matches) {
-                document.body.classList.add('dark-mode');
-            } else {
-                document.body.classList.remove('dark-mode');
-            }
-            const toggle = document.getElementById('dark-toggle');
-            if (toggle) toggle.checked = e.matches;
-        }
-    });
+    const shouldBeDark = localStorage.getItem('darkMode') === 'true';
+    document.body.classList.toggle('dark-mode', shouldBeDark);
+    // 明確同步開關視覺狀態，避免瀏覽器保留上次操作的 checkbox 狀態導致開關顯示跟實際主題不一致
+    const toggle = document.getElementById('dark-toggle');
+    if (toggle) toggle.checked = shouldBeDark;
 }
 function toggleDark() {
     const isDark = document.body.classList.toggle('dark-mode');
