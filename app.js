@@ -311,11 +311,16 @@ async function fetchFlights() {
 }
 
 // ── 航班詳情展開（登機門／行李轉盤，Flightradar24 風格） ──
-// KEF 機場官網 API 提供即時 gate/belt（透過 corsproxy 中轉解決 CORS）；
-// TPE/HKG/FRA 無免金鑰即時介面，提供官方航班頁與 Flightradar24 連結。
+// 已實測逐一確認四個機場的免金鑰即時介面可行性：
+//   KEF 凱夫拉維克：官網 API 本身不擋 CORS，但也不主動允許，經 corsproxy 中轉即可取得即時 gate/belt
+//   TPE 桃園機場：官網 API 直接允許瀏覽器跨網域讀取（無需任何中轉），可直接取得即時 gate/belt
+//   HKG 香港機場：官網 API 主動比對 Origin 白名單拒絕外部網域，瀏覽器端無法繞過（已實測確認）
+//   FRA 法蘭克福機場：查無公開的免金鑰即時查詢介面（已實測搜尋官網與其 AJAX 端點皆無所獲）
+// HKG／FRA 因此僅提供官方航班頁與 Flightradar24 連結，登機門請以現場螢幕為準。
 const FLIGHT_DETAILS = {
     CI923: {
         dep: { code: 'TPE', name: '台北桃園', time: '18:10' }, arr: { code: 'HKG', name: '香港', time: '20:05' },
+        tpe: { date: '2026/08/01', arrival: false },
         links: [['桃園機場出發航班', 'https://www.taoyuan-airport.com/flight_depart']]
     },
     LH797: {
@@ -338,6 +343,7 @@ const FLIGHT_DETAILS = {
     },
     CI916: {
         dep: { code: 'HKG', name: '香港', time: '17:30' }, arr: { code: 'TPE', name: '台北桃園', time: '19:25' },
+        tpe: { date: '2026/08/16', arrival: true },
         links: [['桃園機場抵達航班', 'https://www.taoyuan-airport.com/flight_arrive']]
     }
 };
@@ -361,29 +367,51 @@ async function fetchKefFlightDetail(flightNo, kefOpt) {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const json = await res.json();
     const f = (json.value || []).find(x => x.flightNumber === flightNo && x.arrival === kefOpt.arrival);
-    const data = f ? { gate: f.gate || f.gatePublic || '', belt: f.belt || '', status: f.status || '', updated: f.updatedTime || '' } : null;
+    const data = f ? { source: 'KEF', gate: f.gate || f.gatePublic || '', belt: f.belt || '', status: f.status ? (KEF_STATUS_MAP[f.status] || f.status) : '', updated: f.updatedTime || '' } : null;
     cached[flightNo] = { time: Date.now(), data };
     localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
     return data;
 }
 
-function renderFlightDetail(no, kefData, kefErr) {
+// 桃園機場：官網 API 直接允許跨網域讀取，不需任何中轉代理
+async function fetchTpeFlightDetail(flightNo, tpeOpt) {
+    const CACHE_KEY = 'iceland_tpe_detail';
+    const CACHE_TIME = 10 * 60 * 1000;
+    const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
+    const hit = cached[flightNo];
+    if (hit && Date.now() - hit.time < CACHE_TIME) return hit.data;
+
+    const res = await fetch('https://www.taoyuan-airport.com/api/api/flight/a_flight', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ODate: tpeOpt.date, AState: tpeOpt.arrival ? 'A' : 'D', STime: '00:00', ETime: '23:59', language: 'ch' })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    const code = flightNo.replace(/^([A-Za-z]+)0*(\d+)$/, '$1$2');
+    const f = json.find(x => x.flightCode === code);
+    const data = f ? { source: '桃園機場', gate: f.Gate || '', belt: tpeOpt.arrival ? (f.StopCode && f.StopCode !== '.' ? f.StopCode : '') : '', status: (f.Memo || f.CurrentStatus || '').trim(), updated: f.RTime ? f.RTime.slice(0, 5) : '' } : null;
+    cached[flightNo] = { time: Date.now(), data };
+    localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
+    return data;
+}
+
+function renderFlightDetail(no, liveData, liveErr) {
     const d = FLIGHT_DETAILS[no];
-    const isKefDep = d.kef && !d.kef.arrival;
-    const isKefArr = d.kef && d.kef.arrival;
+    const liveOpt = d.kef || d.tpe;
+    const sourceName = d.kef ? 'KEF 機場' : d.tpe ? '桃園機場' : '';
     let gateStr = '—', beltStr = '—', statusStr = '';
-    if (kefData) {
-        if (isKefDep) gateStr = kefData.gate || '未分配';
-        if (isKefArr) beltStr = kefData.belt || '未分配';
-        const zh = KEF_STATUS_MAP[kefData.status] || kefData.status;
-        statusStr = `${zh}${kefData.updated ? `（更新 ${kefData.updated}）` : ''}`;
+    if (liveData) {
+        if (!liveOpt.arrival) gateStr = liveData.gate || '未分配';
+        if (liveOpt.arrival) beltStr = liveData.belt || '未分配';
+        statusStr = `${liveData.status || '尚無狀態'}${liveData.updated ? `（更新 ${liveData.updated}）` : ''}`;
     }
-    const kefNote = d.kef
-        ? (kefData
-            ? `<div class="fd-row fd-status"><span>🛰️ KEF 機場即時狀態</span><span>${statusStr}</span></div>`
-            : kefErr
-                ? '<div class="fd-note">⚠️ KEF 機場資料暫時無法取得，可稍後再試</div>'
-                : '<div class="fd-note">ℹ️ KEF 機場尚無此班次資料（通常起飛當日才開放）</div>')
+    const liveNote = liveOpt
+        ? (liveData
+            ? `<div class="fd-row fd-status"><span>🛰️ ${sourceName}即時狀態</span><span>${statusStr}</span></div>`
+            : liveErr
+                ? `<div class="fd-note">⚠️ ${sourceName}資料暫時無法取得，可稍後再試</div>`
+                : `<div class="fd-note">ℹ️ ${sourceName}尚無此班次資料（通常起飛前 1-2 天才開放）</div>`)
         : '<div class="fd-note">ℹ️ 此機場未提供免費即時介面，登機門請以現場螢幕為準</div>';
 
     const links = [...d.links, ['Flightradar24 即時追蹤', `https://www.flightradar24.com/data/flights/${no.toLowerCase()}`]]
@@ -394,7 +422,7 @@ function renderFlightDetail(no, kefData, kefErr) {
         <div class="fd-grid">
             <div class="fd-row"><span>🛫 出發</span><span>${d.dep.code} ${d.dep.name} · ${d.dep.time}</span><span>登機門 ${gateStr}</span></div>
             <div class="fd-row"><span>🛬 抵達</span><span>${d.arr.code} ${d.arr.name} · ${d.arr.time}</span><span>行李轉盤 ${beltStr}</span></div>
-            ${kefNote}
+            ${liveNote}
         </div>
         <div class="fd-links">${links}</div>`;
 }
@@ -407,12 +435,12 @@ async function toggleFlightDetail(no) {
     panel.innerHTML = '<div class="fd-note">⏳ 載入詳細資訊…</div>';
 
     const d = FLIGHT_DETAILS[no];
-    let kefData = null, kefErr = false;
-    if (d.kef) {
-        try { kefData = await fetchKefFlightDetail(no, d.kef); }
-        catch (e) { console.warn(`KEF detail ${no} failed:`, e); kefErr = true; }
-    }
-    panel.innerHTML = renderFlightDetail(no, kefData, kefErr);
+    let liveData = null, liveErr = false;
+    try {
+        if (d.kef) liveData = await fetchKefFlightDetail(no, d.kef);
+        else if (d.tpe) liveData = await fetchTpeFlightDetail(no, d.tpe);
+    } catch (e) { console.warn(`Live detail ${no} failed:`, e); liveErr = true; }
+    panel.innerHTML = renderFlightDetail(no, liveData, liveErr);
 }
 
 // ── 行李打包清單 ──
