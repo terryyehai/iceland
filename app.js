@@ -310,6 +310,111 @@ async function fetchFlights() {
     if (window.lucide) window.lucide.createIcons();
 }
 
+// ── 航班詳情展開（登機門／行李轉盤，Flightradar24 風格） ──
+// KEF 機場官網 API 提供即時 gate/belt（透過 corsproxy 中轉解決 CORS）；
+// TPE/HKG/FRA 無免金鑰即時介面，提供官方航班頁與 Flightradar24 連結。
+const FLIGHT_DETAILS = {
+    CI923: {
+        dep: { code: 'TPE', name: '台北桃園', time: '18:10' }, arr: { code: 'HKG', name: '香港', time: '20:05' },
+        links: [['桃園機場出發航班', 'https://www.taoyuan-airport.com/flight_depart']]
+    },
+    LH797: {
+        dep: { code: 'HKG', name: '香港', time: '23:25' }, arr: { code: 'FRA', name: '法蘭克福', time: '06:55 (+1)' },
+        links: [['香港機場出發航班', 'https://www.hongkongairport.com/en/flights/departures/passenger.page']]
+    },
+    LH844: {
+        dep: { code: 'FRA', name: '法蘭克福', time: '11:10' }, arr: { code: 'KEF', name: '凱夫拉維克', time: '12:55' },
+        kef: { date: '2026-08-02', arrival: true },
+        links: [['法蘭克福機場出發航班', 'https://www.frankfurt-airport.com/en/flights/departures.html'], ['KEF 抵達航班', 'https://www.kefairport.com/en/flights/arrivals']]
+    },
+    LH845: {
+        dep: { code: 'KEF', name: '凱夫拉維克', time: '14:20' }, arr: { code: 'FRA', name: '法蘭克福', time: '19:50' },
+        kef: { date: '2026-08-15', arrival: false },
+        links: [['KEF 出發航班', 'https://www.kefairport.com/en/flights/departures']]
+    },
+    LH796: {
+        dep: { code: 'FRA', name: '法蘭克福', time: '21:40' }, arr: { code: 'HKG', name: '香港', time: '15:45 (+1)' },
+        links: [['法蘭克福機場出發航班', 'https://www.frankfurt-airport.com/en/flights/departures.html']]
+    },
+    CI916: {
+        dep: { code: 'HKG', name: '香港', time: '17:30' }, arr: { code: 'TPE', name: '台北桃園', time: '19:25' },
+        links: [['桃園機場抵達航班', 'https://www.taoyuan-airport.com/flight_arrive']]
+    }
+};
+
+// KEF 機場狀態代碼 → 中文
+const KEF_STATUS_MAP = {
+    NoStatus: '尚未開放', GateOpen: '登機門開放', GTO: '登機門開放', Boarding: '登機中', BRD: '登機中',
+    BDC: '最後登機', FinalCall: '最後登機', ATD: '已起飛', DEP: '已起飛', CNL: '已取消',
+    DLY: '延誤', EXP: '預計抵達', LAN: '已降落', ARR: '已降落', CFM: '已確認', SCH: '已排定'
+};
+
+async function fetchKefFlightDetail(flightNo, kefOpt) {
+    const CACHE_KEY = 'iceland_kef_detail';
+    const CACHE_TIME = 10 * 60 * 1000;
+    const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
+    const hit = cached[flightNo];
+    if (hit && Date.now() - hit.time < CACHE_TIME) return hit.data;
+
+    const apiUrl = `https://www.kefairport.com/api/flightData?date=${kefOpt.date}`;
+    const res = await fetch('https://corsproxy.io/?url=' + encodeURIComponent(apiUrl));
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    const f = (json.value || []).find(x => x.flightNumber === flightNo && x.arrival === kefOpt.arrival);
+    const data = f ? { gate: f.gate || f.gatePublic || '', belt: f.belt || '', status: f.status || '', updated: f.updatedTime || '' } : null;
+    cached[flightNo] = { time: Date.now(), data };
+    localStorage.setItem(CACHE_KEY, JSON.stringify(cached));
+    return data;
+}
+
+function renderFlightDetail(no, kefData, kefErr) {
+    const d = FLIGHT_DETAILS[no];
+    const isKefDep = d.kef && !d.kef.arrival;
+    const isKefArr = d.kef && d.kef.arrival;
+    let gateStr = '—', beltStr = '—', statusStr = '';
+    if (kefData) {
+        if (isKefDep) gateStr = kefData.gate || '未分配';
+        if (isKefArr) beltStr = kefData.belt || '未分配';
+        const zh = KEF_STATUS_MAP[kefData.status] || kefData.status;
+        statusStr = `${zh}${kefData.updated ? `（更新 ${kefData.updated}）` : ''}`;
+    }
+    const kefNote = d.kef
+        ? (kefData
+            ? `<div class="fd-row fd-status"><span>🛰️ KEF 機場即時狀態</span><span>${statusStr}</span></div>`
+            : kefErr
+                ? '<div class="fd-note">⚠️ KEF 機場資料暫時無法取得，可稍後再試</div>'
+                : '<div class="fd-note">ℹ️ KEF 機場尚無此班次資料（通常起飛當日才開放）</div>')
+        : '<div class="fd-note">ℹ️ 此機場未提供免費即時介面，登機門請以現場螢幕為準</div>';
+
+    const links = [...d.links, ['Flightradar24 即時追蹤', `https://www.flightradar24.com/data/flights/${no.toLowerCase()}`]]
+        .map(([label, url]) => `<a class="fd-link" href="${url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${label} ↗</a>`)
+        .join('');
+
+    return `
+        <div class="fd-grid">
+            <div class="fd-row"><span>🛫 出發</span><span>${d.dep.code} ${d.dep.name} · ${d.dep.time}</span><span>登機門 ${gateStr}</span></div>
+            <div class="fd-row"><span>🛬 抵達</span><span>${d.arr.code} ${d.arr.name} · ${d.arr.time}</span><span>行李轉盤 ${beltStr}</span></div>
+            ${kefNote}
+        </div>
+        <div class="fd-links">${links}</div>`;
+}
+
+async function toggleFlightDetail(no) {
+    const panel = document.getElementById(`f-${no}-detail`);
+    if (!panel) return;
+    if (!panel.hidden) { panel.hidden = true; return; }
+    panel.hidden = false;
+    panel.innerHTML = '<div class="fd-note">⏳ 載入詳細資訊…</div>';
+
+    const d = FLIGHT_DETAILS[no];
+    let kefData = null, kefErr = false;
+    if (d.kef) {
+        try { kefData = await fetchKefFlightDetail(no, d.kef); }
+        catch (e) { console.warn(`KEF detail ${no} failed:`, e); kefErr = true; }
+    }
+    panel.innerHTML = renderFlightDetail(no, kefData, kefErr);
+}
+
 // ── 行李打包清單 ──
 const PACKING_ITEMS = [
     { id: 'p_doc', label: '護照 (>6個月效期) & 機票行程單' },
