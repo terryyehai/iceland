@@ -5,6 +5,62 @@ const DRONE_LAYER_URLS = {
   temporary: 'https://gis.natt.is/geoserver/samgongustofa/ows?service=WFS&version=2.0.0&request=GetFeature&typeName=samgongustofa:skyndilokanir_dronar&outputFormat=application/json'
 };
 
+const DRONE_SOURCES = {
+  map: 'https://kort.gis.is/mapview/?app=dronar',
+  nature: 'https://www.nattura.is/stofnunin/reglur-um-notkun-drona',
+  vatnajokull: 'https://www.vatnajokulsthjodgardur.is/en/thenationalpark/drone-rules',
+  thingvellir: 'https://www.thingvellir.is/en/administration/licensing/droneflying-for-personal-use/',
+  kerid: 'https://www.kerid.is/'
+};
+
+// 只收錄行程中的觀光／活動地點；餐廳、住宿、超市與純交通點不列入。
+// status 依 2026 年 8 月行程判讀，官方即時 WFS 命中會在載入後再提高限制層級。
+const TRIP_SPOT_RULES = {
+  '藍湖 Blue Lagoon': { status: 'review', detail: '私人營運場地；未查得場地方公開的休閒空拍許可，須先取得場方同意並遵守現場標示。', source: 'https://www.bluelagoon.com/' },
+  '辛格韋德利 Silfra': { status: 'conditional', golden: true, detail: 'Þingvellir 核心區（含 Silfra）只可於 09:00 前或 18:00 後飛行；避開遊客與野生動物。', source: DRONE_SOURCES.thingvellir },
+  'Efstidalur II': { status: 'review', golden: true, detail: '私人農場與餐飲場地；官方未公布可飛政策，必須先取得地主／業者同意。', source: 'https://efstidalur.is/' },
+  'Geysir': { status: 'blocked', golden: true, detail: '2026 保護區規則：休閒空拍全年禁止，僅特定商業用途可申請許可。', source: DRONE_SOURCES.nature },
+  'Gullfoss': { status: 'blocked', golden: true, detail: '2026 保護區規則：休閒空拍全年禁止；即使 Drónakort 點位未命中也不得飛。', source: DRONE_SOURCES.nature },
+  'Kerið': { status: 'review', golden: true, detail: '火口湖位於私人土地；景點官網未公布空拍許可，現場 No Drone 牌及地主決定優先。', source: DRONE_SOURCES.kerid },
+  'Seljalandsfoss': { status: 'review', detail: '未列入 2026 指定禁飛清單，但入口來自農地且人潮密集；須確認現場牌示與地主規則。', source: DRONE_SOURCES.map },
+  'Skógafoss': { status: 'blocked', detail: '2026 保護區規則：休閒空拍全年禁止，僅指定商業用途可申請許可。', source: DRONE_SOURCES.nature },
+  'Sólheimajökull': { status: 'review', detail: '冰川活動區有嚮導、遊客與可能的直升機；須取得起降地管理者同意並避開所有團體。', source: DRONE_SOURCES.map },
+  '飛機殘骸': { status: 'review', detail: 'Sólheimasandur 為私人土地且常有人潮；須遵守地主與現場規定，不能飛越遊客。', source: DRONE_SOURCES.map },
+  'Dyrhólaey': { status: 'blocked', detail: '2026 保護區規則：為保護海鳥與遊客體驗，休閒空拍全年禁止。', source: DRONE_SOURCES.nature },
+  'Heimaey 港口': { status: 'review', detail: '港區鄰近 Vestmannaeyjar 機場且有船舶與人群；即時官方空域若命中須取得授權。', source: DRONE_SOURCES.map },
+  'Eldheimar': { status: 'review', detail: '館舍與市區鄰近 Vestmannaeyjar 機場；須依官方空域及館方規定。', source: DRONE_SOURCES.map },
+  'Stórhöfði': { status: 'review', detail: '海鸚繁殖與觀察區，且可能落在 Vestmannaeyjar 機場限制空域；不得干擾野生動物。', source: DRONE_SOURCES.map },
+  'Vík 騎馬場': { status: 'review', detail: '私人騎馬活動場地；必須取得業者同意，且不得接近人員、馬匹或干擾活動。', source: DRONE_SOURCES.map },
+  'Fjaðrárgljúfur': { status: 'review', detail: '官方旅遊頁未公布可飛政策；屬敏感峽谷與熱門步道，須依現場封閉、牌示及管理規則。', source: 'https://www.south.is/en/destinations/nature/geosites/fjadrargljufur-canyon' },
+  'Fjallsárlón': { status: 'review', detail: '私人營運冰河湖與船遊區；須先詢問營運者，並注意冰川、遊客與其他活動。', source: DRONE_SOURCES.map },
+  'Jökulsárlón': { status: 'conditional', detail: '8 月只可於 09:00 前或 18:00 後在指定區飛行；人潮紅區始終禁止，並須讓路直升機。', source: DRONE_SOURCES.vatnajokull },
+  'Vestrahorn': { status: 'review', detail: 'Stokksnes／Vestrahorn 為收費私人土地；須取得地主同意並遵守現場 No Drone 標示。', source: 'https://www.stokksnes.is/' },
+  'Skaftafell': { status: 'blocked', detail: 'Skaftafell 大部分區域（含 Svartifoss）休閒空拍禁止；僅 Skaftafellsjökull 前緣於 09:00 前或 18:00 後例外。', source: DRONE_SOURCES.vatnajokull },
+  'Djúpivogur': { status: 'review', detail: '官方未發現地點特別禁令；仍須避開港區、人群、住宅與鳥類並確認起降地許可。', source: DRONE_SOURCES.map },
+  'Hengifoss': { status: 'review', detail: '官方未發現地點特別禁令；步道與觀景區有人時不可飛越，並須確認地主／現場規則。', source: DRONE_SOURCES.map },
+  'Seyðisfjörður': { status: 'review', detail: '市鎮、住宅與港區環境；官方未發現地點特別禁令，但須依一般規則及起降地許可評估。', source: DRONE_SOURCES.map },
+  'Stuðlagil': { status: 'review', detail: '峽谷兩側涉及私人土地且步道狹窄；須確認地主規則並避免飛越人群。', source: DRONE_SOURCES.map },
+  'Dettifoss': { status: 'conditional', detail: '8 月僅西側、08:00 前或 18:00 後可飛；只能飛峽谷上方，不得越過最北觀景台向北。', source: DRONE_SOURCES.vatnajokull },
+  'Hverir': { status: 'review', detail: '地熱區環境敏感且鄰近 Mývatn 保護區；須以現場邊界、牌示及官方地圖確認。', source: DRONE_SOURCES.map },
+  'Goðafoss': { status: 'blocked', detail: '2026 保護區規則：休閒空拍全年禁止，僅指定商業用途可申請許可。', source: DRONE_SOURCES.nature },
+  'Aldeyjarfoss': { status: 'review', detail: '官方未發現地點特別禁令；高地與私人／公有土地邊界仍須現場確認。', source: DRONE_SOURCES.map },
+  'Dimmuborgir': { status: 'blocked', detail: '行程在 5/1–9/15 限制期內；此期間休閒用途不核發許可，僅指定商業用途可申請。', source: DRONE_SOURCES.nature },
+  'Hverfjall': { status: 'blocked', detail: '位於 Mývatn／Laxá 保護範圍；2026 規則下休閒空拍禁止。', source: DRONE_SOURCES.nature },
+  'Húsavík': { status: 'review', detail: '港口有賞鯨船、人群及海鳥；官方未發現地點特別禁令，仍須向港區／起降地管理者確認。', source: DRONE_SOURCES.map },
+  'GeoSea': { status: 'review', detail: '私人溫泉營運場地；須先取得業者同意，且不能飛越泡湯旅客。', source: 'https://www.geosea.is/' },
+  'Hvítserkur': { status: 'review', detail: '海岸野生動物與鳥類敏感區；官方未發現地點特別禁令，但須停止任何造成動物反應的飛行。', source: DRONE_SOURCES.map },
+  'Sky Lagoon': { status: 'review', detail: '私人溫泉營運場地與密集旅客區；須先取得業者同意並遵守隱私規定。', source: 'https://www.skylagoon.com/' },
+  'Ytri Tunga 海豹灘': { status: 'review', detail: '海豹觀察區；即使空域無限制也不得接近或干擾野生動物，須遵守地主與現場規定。', source: DRONE_SOURCES.map },
+  'Arnarstapi': { status: 'blocked', detail: 'Stapi／Hellnar 海岸列入全年限制清單，休閒空拍禁止。', source: DRONE_SOURCES.nature },
+  'Djúpalónssandur': { status: 'blocked', detail: '位於 Snæfellsjökull 國家公園；8 月在 5/1–9/15 限制期內，休閒用途不核發許可。', source: DRONE_SOURCES.nature },
+  'Kirkjufell': { status: 'review', detail: '熱門景點涉及私人土地與密集遊客；官方未發現地點特別禁令，須取得起降地許可並遵守現場牌示。', source: DRONE_SOURCES.map },
+  '哈爾格林姆教堂': { status: 'review', detail: '市中心宗教建築與密集人群；須取得起降地／管理者同意，且不可飛越人群。', source: DRONE_SOURCES.map },
+  'Harpa': { status: 'review', detail: '市中心與敏感政府設施、Reykjavík 機場空域相鄰；以即時官方圖層判定授權要求。', source: DRONE_SOURCES.map },
+  '太陽航海者': { status: 'review', detail: '熱門濱海公共空間且人潮密集；官方未發現地點特別禁令，仍不得飛越人群。', source: DRONE_SOURCES.map },
+  '托寧湖': { status: 'review', detail: '鄰近 Alþingi 與 Reykjavík 機場限制區，且有大量水鳥；以即時官方圖層判定。', source: DRONE_SOURCES.map },
+  'Perlan': { status: 'review', detail: '私人館舍、公園與市區人群環境；須取得起降地管理者同意並確認 Reykjavík 空域。', source: DRONE_SOURCES.map }
+};
+
 const CATEGORY_INFO = {
   a1: {
     title: 'A1：C0／C1 輕型無人機',
@@ -67,9 +123,13 @@ let permanentData = null;
 let temporaryData = null;
 let userMarker = null;
 let accuracyCircle = null;
+let tripSpotLayer = null;
+let tripSpots = [];
+let activeTripFilter = 'all';
 
 document.addEventListener('DOMContentLoaded', () => {
   initMap();
+  initTripSpots();
   initCategoryTabs();
   renderPlaces();
   initChecklist();
@@ -90,6 +150,9 @@ function initMap() {
   droneMap.getPane('officialRestrictions').style.zIndex = 410;
   droneMap.createPane('temporaryRestrictions');
   droneMap.getPane('temporaryRestrictions').style.zIndex = 420;
+  droneMap.createPane('tripSpots');
+  droneMap.getPane('tripSpots').style.zIndex = 650;
+  tripSpotLayer = L.layerGroup().addTo(droneMap);
 
   loadOfficialLayers();
 }
@@ -108,6 +171,8 @@ async function loadOfficialLayers() {
     temporaryData = results[1].value;
     addRestrictionLayer(temporaryData, true);
   }
+
+  updateTripSpotOfficialHits();
 
   const failed = results.filter(result => result.status === 'rejected').length;
   if (failed) {
@@ -388,4 +453,134 @@ function escapeHtml(value) {
   return String(value ?? '').replace(/[&<>'"]/g, character => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
   }[character]));
+}
+
+function initTripSpots() {
+  const days = window.TRIP_DATA || [];
+  tripSpots = days.flatMap(day => day.markers
+    .filter(marker => TRIP_SPOT_RULES[marker.name])
+    .map(marker => ({
+      ...marker,
+      day: day.day,
+      date: day.date,
+      baseRule: TRIP_SPOT_RULES[marker.name],
+      officialHits: []
+    })));
+
+  document.querySelectorAll('.trip-filter').forEach(button => button.addEventListener('click', () => {
+    activeTripFilter = button.dataset.filter;
+    document.querySelectorAll('.trip-filter').forEach(item => item.classList.toggle('active', item === button));
+    renderTripSpots();
+  }));
+  renderTripSpots();
+}
+
+function updateTripSpotOfficialHits() {
+  if (!tripSpots.length) return;
+  tripSpots.forEach(spot => {
+    const permanentHits = permanentData ? featuresAtPoint(permanentData.features, spot.lng, spot.lat) : [];
+    const temporaryHits = temporaryData ? featuresAtPoint(temporaryData.features, spot.lng, spot.lat) : [];
+    spot.officialHits = [...temporaryHits, ...permanentHits];
+  });
+  renderTripSpots();
+}
+
+function getTripSpotStatus(spot) {
+  if (spot.baseRule.status === 'blocked') return 'blocked';
+  if (spot.baseRule.status === 'conditional' || spot.officialHits.length) return 'conditional';
+  return 'review';
+}
+
+function getFilteredTripSpots() {
+  if (activeTripFilter === 'all') return tripSpots;
+  if (activeTripFilter === 'golden') return tripSpots.filter(spot => spot.baseRule.golden);
+  return tripSpots.filter(spot => getTripSpotStatus(spot) === activeTripFilter);
+}
+
+function renderTripSpots() {
+  if (!tripSpotLayer) return;
+  const visible = getFilteredTripSpots();
+  tripSpotLayer.clearLayers();
+
+  visible.forEach(spot => {
+    const status = getTripSpotStatus(spot);
+    const marker = L.marker([spot.lat, spot.lng], {
+      pane: 'tripSpots',
+      icon: L.divIcon({
+        className: 'trip-marker-wrap',
+        html: `<div class="trip-marker ${status}" title="Day ${spot.day} ${escapeHtml(spot.name)}"><span>${spot.day}</span></div>`,
+        iconSize: [32, 38],
+        iconAnchor: [16, 36],
+        popupAnchor: [0, -34]
+      })
+    }).bindPopup(buildTripSpotPopup(spot));
+    marker.addTo(tripSpotLayer);
+    spot.mapMarker = marker;
+  });
+
+  renderTripSummary();
+  renderTripSpotList(visible);
+}
+
+function buildTripSpotPopup(spot) {
+  const status = getTripSpotStatus(spot);
+  const labels = { blocked: '休閒空拍禁止', conditional: '有條件／需授權', review: '依一般規則評估' };
+  const official = spot.officialHits.length
+    ? `<div class="trip-popup-official"><b>即時官方圖層命中：</b>${escapeHtml([...new Set(spot.officialHits.map(hit => hit.properties?.name).filter(Boolean))].join('、'))}</div>`
+    : '<div class="trip-popup-clear">目前點位未命中官方 WFS；不代表自動獲准。</div>';
+  return `
+    <div class="trip-popup">
+      <span class="trip-popup-day">Day ${spot.day} · ${escapeHtml(spot.date)}</span>
+      <strong>${escapeHtml(spot.name)}</strong>
+      <span class="trip-status ${status}">${labels[status]}</span>
+      <p>${escapeHtml(spot.baseRule.detail)}</p>
+      ${official}
+      <a href="${escapeHtml(spot.baseRule.source)}" target="_blank" rel="noopener">查看判定來源 ↗</a>
+    </div>`;
+}
+
+function renderTripSummary() {
+  const counts = tripSpots.reduce((result, spot) => {
+    result[getTripSpotStatus(spot)] += 1;
+    return result;
+  }, { blocked: 0, conditional: 0, review: 0 });
+  document.getElementById('trip-summary').innerHTML = `
+    <div><strong>${tripSpots.length}</strong><span>行程觀光點</span></div>
+    <div class="blocked"><strong>${counts.blocked}</strong><span>休閒禁止</span></div>
+    <div class="conditional"><strong>${counts.conditional}</strong><span>有條件／需授權</span></div>
+    <div class="review"><strong>${counts.review}</strong><span>一般規則評估</span></div>`;
+}
+
+function renderTripSpotList(spots) {
+  const labels = { blocked: '禁止', conditional: '有條件', review: '一般規則評估' };
+  const grouped = Map.groupBy ? Map.groupBy(spots, spot => spot.day) : spots.reduce((map, spot) => {
+    if (!map.has(spot.day)) map.set(spot.day, []);
+    map.get(spot.day).push(spot);
+    return map;
+  }, new Map());
+
+  document.getElementById('trip-spot-list').innerHTML = [...grouped.entries()].map(([day, daySpots]) => `
+    <section class="trip-day-group">
+      <header><span>DAY ${day}</span><small>${escapeHtml(daySpots[0].date)}</small></header>
+      <div>
+        ${daySpots.map(spot => {
+          const status = getTripSpotStatus(spot);
+          const officialBadge = spot.officialHits.length ? '<em>官方圖層命中</em>' : '';
+          return `<button class="trip-spot-row" type="button" data-trip-day="${spot.day}" data-trip-name="${escapeHtml(spot.name)}">
+            <span class="trip-row-status ${status}">${labels[status]}</span>
+            <span class="trip-row-copy"><b>${escapeHtml(spot.name)}</b><small>${escapeHtml(spot.baseRule.detail)}</small>${officialBadge}</span>
+            <i data-lucide="crosshair"></i>
+          </button>`;
+        }).join('')}
+      </div>
+    </section>`).join('') || '<p class="trip-empty">此篩選沒有景點。</p>';
+
+  document.querySelectorAll('.trip-spot-row').forEach(button => button.addEventListener('click', () => {
+    const spot = tripSpots.find(item => item.day === Number(button.dataset.tripDay) && item.name === button.dataset.tripName);
+    if (!spot) return;
+    droneMap.setView([spot.lat, spot.lng], 14);
+    spot.mapMarker?.openPopup();
+    document.getElementById('map-title').scrollIntoView({ behavior: 'smooth' });
+  }));
+  if (window.lucide) window.lucide.createIcons();
 }
