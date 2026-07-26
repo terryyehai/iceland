@@ -1453,3 +1453,120 @@ body.large-text .day-theme,
 body.large-text .name {
     font-size: 18px !important;
 }
+
+/* ===== 響應式版面：平板 iPad（≥768px）===== */
+@media (min-width: 768px) {
+    body {
+        max-width: 760px;
+    }
+
+    .hero {
+        height: 340px;
+        max-height: 340px;
+    }
+
+    .hero-content {
+        padding: 28px;
+    }
+
+    .hero-title {
+        font-size: 36px;
+    }
+
+    .hero-date {
+        font-size: 15px;
+    }
+
+    /* 天氣卡：5 城市一排展開，免橫向捲動 */
+    .weather-cards {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        overflow-x: visible;
+    }
+
+    .weather-card {
+        min-width: 0;
+    }
+
+    /* 實用資訊：雙欄瀑布流 */
+    .info-section {
+        display: block;
+        columns: 2;
+        column-gap: 12px;
+    }
+
+    .info-section>.info-card {
+        break-inside: avoid;
+        margin-bottom: 12px;
+    }
+
+    /* 每日行程：雙欄網格 */
+    .day-cards {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    #map-overview {
+        height: 400px;
+    }
+
+    /* 底部導覽改為懸浮膠囊 */
+    .bottom-nav {
+        max-width: 480px;
+        bottom: 14px;
+        border-radius: 22px;
+        border: 1px solid rgba(0, 0, 0, .07);
+        padding: 10px 0 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, .14);
+    }
+
+    /* 設定面板改為置中對話框 */
+    .settings-overlay {
+        align-items: center;
+    }
+
+    .settings-panel {
+        border-radius: 24px;
+    }
+}
+
+/* ===== 響應式版面：桌機 PC（≥1100px）===== */
+@media (min-width: 1100px) {
+    body {
+        max-width: 1080px;
+    }
+
+    .hero {
+        height: 400px;
+        max-height: 400px;
+        border-radius: 0 0 40px 40px;
+    }
+
+    .hero-title {
+        font-size: 44px;
+    }
+
+    .info-section {
+        columns: 3;
+    }
+
+    .day-cards {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    #map-overview {
+        height: 480px;
+    }
+}
+
+/* 滑鼠裝置：卡片 hover 浮起效果 */
+@media (hover: hover) {
+    .day-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, .14);
+    }
+
+    .weather-card:hover {
+        transform: translateY(-2px);
+    }
+}
