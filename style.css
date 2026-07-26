@@ -38,7 +38,7 @@ body {
     height: 60vw;
     max-height: 320px;
     min-height: 240px;
-    background: url('images/hero-iceland.svg') center/cover no-repeat, #0b1330;
+    background: url('images/hero-iceland.svg') center/cover no-repeat, #e0f2fe;
     overflow: hidden;
     border-radius: 0 0 32px 32px
 }
@@ -46,7 +46,7 @@ body {
 .hero-gradient {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(30, 58, 95, .95) 0%, rgba(30, 58, 95, .3) 60%, transparent 100%)
+    background: linear-gradient(to top, rgba(30, 58, 95, .78) 0%, rgba(30, 58, 95, .28) 45%, transparent 72%)
 }
 
 .hero-content {
@@ -1180,7 +1180,7 @@ body.dark-mode {
 }
 
 body.dark-mode .hero {
-    background: url('https://images.unsplash.com/photo-1531366936337-77b8555e5b0b?q=80&w=1080&auto=format&fit=crop') center/cover no-repeat
+    background: url('images/hero-iceland-night.svg') center/cover no-repeat, #070d24
 }
 
 body.dark-mode .bottom-nav {

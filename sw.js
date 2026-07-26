@@ -1,7 +1,7 @@
 /* ===== Service Worker — 冰島自駕遊 PWA ===== */
 /* 作用：快取靜態資源，讓 App 能離線瀏覽已造訪過的頁面 */
 
-const CACHE_NAME = 'iceland-travel-v2';
+const CACHE_NAME = 'iceland-travel-v3';
 
 // 安裝時需要預先快取的核心檔案
 const ASSETS_TO_CACHE = [
@@ -18,6 +18,9 @@ const ASSETS_TO_CACHE = [
   // 16 個每日頁面與 SVG 插畫（離線也能看整份行程）
   ...Array.from({ length: 16 }, (_, i) => `./day${i + 1}.html`),
   ...Array.from({ length: 16 }, (_, i) => `./images/day${i + 1}.svg`),
+  // 首頁 Hero 插畫（明亮／深色兩版）
+  './images/hero-iceland.svg',
+  './images/hero-iceland-night.svg',
   // Google Fonts
   'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
   // Leaflet 地圖函式庫
