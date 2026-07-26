@@ -229,76 +229,85 @@ async function fetchAurora() {
     }
 }
 
-// ── 航班追蹤 (Aviationstack) ──
+// ── 航班資訊：班表狀態 + airplanes.live 即時 ADS-B 補充 ──
+// 狀態主體由行程班表推算（含時區，永遠正確）；airplanes.live 免金鑰、支援 CORS、無配額，
+// 查得到即時訊號時疊加顯示高度/速度。（aviationstack 配額已耗盡、OpenSky 擋 CORS、adsbdb 航線資料有誤，皆不可用）
+const FLIGHT_SCHEDULE = [
+    { no: 'CI923', callsign: 'CAL923', dep: '2026-08-01T18:10:00+08:00', arr: '2026-08-01T20:05:00+08:00' },
+    { no: 'LH797', callsign: 'DLH797', dep: '2026-08-01T23:25:00+08:00', arr: '2026-08-02T06:55:00+02:00' },
+    { no: 'LH844', callsign: 'DLH844', dep: '2026-08-02T11:10:00+02:00', arr: '2026-08-02T12:55:00+00:00' },
+    { no: 'LH845', callsign: 'DLH845', dep: '2026-08-15T14:20:00+00:00', arr: '2026-08-15T19:50:00+02:00' },
+    { no: 'LH796', callsign: 'DLH796', dep: '2026-08-15T21:40:00+02:00', arr: '2026-08-16T15:45:00+08:00' },
+    { no: 'CI916', callsign: 'CAL916', dep: '2026-08-16T17:30:00+08:00', arr: '2026-08-16T19:25:00+08:00' }
+];
+
 async function fetchFlights() {
-    const flights = ['CI923', 'LH797', 'LH844', 'LH845', 'LH796', 'CI916'];
-    const apiKey = '4e6b9230157d7292916389ff7e13289f';
-    const CACHE_KEY = 'iceland_flights_data';
-    const CACHE_TIME = 30 * 60 * 1000; // 30 分鐘快取，節省免費額度
+    const CACHE_KEY = 'iceland_flights_live';
+    const CACHE_TIME = 10 * 60 * 1000; // 10 分鐘快取，避免頻繁打 API
 
-    const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || '{"time":0, "data":{}}');
-    const now = Date.now();
-    let dataMap = cached.data;
+    const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || '{"time":0,"data":{}}');
+    let liveMap = cached.data;
 
-    if (now - cached.time > CACHE_TIME) {
-        dataMap = {};
-        for (let f of flights) {
+    if (Date.now() - cached.time > CACHE_TIME) {
+        liveMap = {};
+        await Promise.all(FLIGHT_SCHEDULE.map(async fs => {
             try {
-                const url = `https://api.aviationstack.com/v1/flights?access_key=${apiKey}&flight_iata=${f}`;
-                const res = await fetch(url);
+                const res = await fetch(`https://api.airplanes.live/v2/callsign/${fs.callsign}`);
+                if (!res.ok) return;
                 const json = await res.json();
-
-                if (json && json.data && json.data.length > 0) {
-                    const flightData = json.data[0];
-                    dataMap[f] = {
-                        status: flightData.flight_status,
-                        depGate: flightData.departure?.gate || '-',
-                        depTerminal: flightData.departure?.terminal || '-',
-                        arrGate: flightData.arrival?.gate || '-',
-                        arrTerminal: flightData.arrival?.terminal || '-',
-                        baggage: flightData.arrival?.baggage || '-'
-                    };
-                } else {
-                    dataMap[f] = { status: 'unknown' };
-                }
-            } catch (err) {
-                console.warn(`Fetch flight ${f} failed:`, err);
-                dataMap[f] = { status: 'error' };
-            }
-        }
-        localStorage.setItem(CACHE_KEY, JSON.stringify({ time: now, data: dataMap }));
+                const ac = (json.ac || [])[0];
+                if (ac) liveMap[fs.no] = { alt: ac.alt_baro, gs: ac.gs };
+            } catch (e) { console.warn(`Fetch live flight ${fs.no} failed:`, e); }
+        }));
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ time: Date.now(), data: liveMap }));
     }
 
-    // 更新 UI
-    flights.forEach(f => {
-        const el = document.getElementById(`f-${f}`);
-        const exEl = document.getElementById(`f-${f}-ex`);
-        if (el && dataMap[f]) {
-            const fd = typeof dataMap[f] === 'string' ? { status: dataMap[f] } : dataMap[f];
-            const status = fd.status;
-            if (status === 'scheduled') { el.innerHTML = '⏱️ 預定起飛'; el.className = 'fi-status st-sched'; }
-            else if (status === 'active') { el.innerHTML = '✈️ 飛行中'; el.className = 'fi-status st-active'; }
-            else if (status === 'landed') { el.innerHTML = '🛬 已抵達'; el.className = 'fi-status st-landed'; }
-            else if (status === 'cancelled') { el.innerHTML = '❌ 已取消'; el.className = 'fi-status st-cancelled'; }
-            else if (status === 'incident' || status === 'diverted') { el.innerHTML = '⚠️ 異常'; el.className = 'fi-status st-cancelled'; }
-            else { el.innerHTML = '🔍 查無狀態'; el.className = 'fi-status st-unk'; }
+    const now = Date.now();
+    FLIGHT_SCHEDULE.forEach(fs => {
+        const el = document.getElementById(`f-${fs.no}`);
+        const exEl = document.getElementById(`f-${fs.no}-ex`);
+        if (!el) return;
 
-            if (exEl && fd.status && fd.status !== 'unknown' && fd.status !== 'error') {
-                const termStr = fd.depTerminal !== '-' ? `T${fd.depTerminal}` : '-';
+        const dep = new Date(fs.dep).getTime();
+        const arr = new Date(fs.arr).getTime();
+        const live = liveMap[fs.no];
+        const inWindow = now >= dep && now <= arr + 60 * 60 * 1000; // 起飛後至抵達+1小時內
+
+        if (now < dep - 2 * 3600000) {
+            const daysLeft = Math.ceil((dep - now) / 86400000);
+            el.innerHTML = daysLeft > 1 ? `🗓️ 已排定（${daysLeft} 天後）` : '🗓️ 已排定（今日）';
+            el.className = 'fi-status st-sched';
+        } else if (now < dep) {
+            el.innerHTML = '🛄 即將起飛';
+            el.className = 'fi-status st-sched';
+        } else if (inWindow) {
+            if (live && live.alt !== 'ground') { el.innerHTML = '✈️ 飛行中（即時）'; el.className = 'fi-status st-active'; }
+            else if (live) { el.innerHTML = '🛬 已在地面'; el.className = 'fi-status st-landed'; }
+            else if (now <= arr) { el.innerHTML = '✈️ 飛行中（依班表）'; el.className = 'fi-status st-active'; }
+            else { el.innerHTML = '🛬 已抵達'; el.className = 'fi-status st-landed'; }
+        } else {
+            el.innerHTML = '✅ 已完成';
+            el.className = 'fi-status st-landed';
+        }
+
+        // 即時 ADS-B 補充資訊：飛行中顯示高度/速度；行前查到同班號今日航班則顯示參考訊號
+        if (exEl) {
+            if (live && live.alt !== 'ground') {
+                const altFt = typeof live.alt === 'number' ? Math.round(live.alt).toLocaleString() : '-';
+                const kmh = typeof live.gs === 'number' ? Math.round(live.gs * 1.852).toLocaleString() : '-';
+                const label = inWindow ? '📡 即時訊號' : '📡 同班號今日航班（參考）';
                 exEl.innerHTML = `
                     <div class="fi-extra-info">
-                        <span>出發: 航廈 ${termStr} / 登機台 ${fd.depGate}</span>
-                        <span>抵達: 行李轉盤 ${fd.baggage}</span>
-                    </div>
-                `;
+                        <span>${label}</span>
+                        <span>高度 ${altFt} ft｜時速 ${kmh} km/h</span>
+                    </div>`;
+            } else {
+                exEl.innerHTML = '';
             }
         }
     });
 
-    // 重新觸發 Lucide icon 繪製
-    if (window.lucide) {
-        window.lucide.createIcons();
-    }
+    if (window.lucide) window.lucide.createIcons();
 }
 
 // ── 行李打包清單 ──
