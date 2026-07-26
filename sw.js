@@ -1,7 +1,7 @@
 /* ===== Service Worker — 冰島自駕遊 PWA ===== */
 /* 作用：快取靜態資源，讓 App 能離線瀏覽已造訪過的頁面 */
 
-const CACHE_NAME = 'iceland-travel-v8';
+const CACHE_NAME = 'iceland-travel-v9';
 
 // 安裝時需要預先快取的核心檔案
 const ASSETS_TO_CACHE = [
@@ -30,7 +30,7 @@ const ASSETS_TO_CACHE = [
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
   // Lucide 圖標
-  'https://unpkg.com/lucide@0.462.0'
+  'https://unpkg.com/lucide@1.27.0'
 ];
 
 // ── 安裝階段：快取靜態資源 ──
