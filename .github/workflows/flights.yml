@@ -1,0 +1,47 @@
+# 定期在 server-side 抓取 KEF／HKG／FRA 機場官網的即時登機門／行李轉盤資訊，
+# 寫回 flights-live.json（原因見 scripts/fetch-flights.mjs 開頭註解）。
+# 這個 workflow 只服務 2026-07-30 ~ 2026-08-17 這趟行程，行程結束後可以整個刪除。
+name: 更新即時航班資訊
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "flights-live"
+  cancel-in-progress: true
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 檢出程式碼
+        uses: actions/checkout@v4
+
+      - name: 設定 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 抓取即時航班資訊
+        run: node scripts/fetch-flights.mjs
+
+      - name: 提交變更（若有）
+        run: |
+          if [ ! -f flights-live.json ]; then
+            echo "尚未在行程期間，未產生 flights-live.json，略過提交"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add flights-live.json
+          if git diff --cached --quiet; then
+            echo "無變更，略過提交"
+          else
+            git commit -m "chore: 更新即時航班資訊"
+            git push
+          fi
