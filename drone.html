@@ -6,16 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>冰島空拍飛行助手｜官方禁限航圖與 GPS 風況</title>
   <meta name="description" content="冰島空拍規劃工具：官方禁限航圖層、GPS 定位風速、開放類別規則、保護區限制與有條件空拍地點。" />
-  <meta name="theme-color" content="#123b3a" />
+  <meta name="theme-color" content="#2563eb" />
   <link rel="manifest" href="./manifest.json" />
   <link rel="icon" href="./puffin-icon-192.png" type="image/png" />
   <link rel="apple-touch-icon" href="./puffin-icon-192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/lucide@1.27.0"></script>
-  <link rel="stylesheet" href="drone.css?v=20260726" />
+  <link rel="stylesheet" href="drone.css?v=20260729" />
 </head>
 
 <body>
@@ -68,12 +69,20 @@
           <div class="condition"><span>陣風</span><strong id="wind-gust">--</strong><small>m/s</small></div>
           <div class="condition"><span>風向</span><strong id="wind-direction">--</strong><small id="wind-bearing">度</small></div>
           <div class="condition"><span>定位精度</span><strong id="gps-accuracy">--</strong><small>公尺</small></div>
+          <div class="condition"><span>海拔</span><strong id="elevation" title="">--</strong><small>公尺</small></div>
+        </div>
+        <div class="wind-advisory" id="wind-advisory" hidden>
+          <i data-lucide="triangle-alert"></i><span id="wind-advisory-text">--</span>
         </div>
         <div class="location-meta">
           <span id="coordinates">GPS 座標尚未取得</span>
+          <span class="location-actions" id="location-actions" hidden>
+            <button type="button" id="copy-coords-btn" title="複製座標"><i data-lucide="copy"></i>複製</button>
+            <a id="gmaps-link" href="#" target="_blank" rel="noopener" title="在 Google 地圖開啟"><i data-lucide="external-link"></i>Google 地圖</a>
+          </span>
           <span id="weather-time">風況尚未更新</span>
         </div>
-        <p class="weather-disclosure">風況為 Open-Meteo 定位點模型資料；起飛前仍須核對冰島氣象局航空天氣，並遵守機型手冊的抗風限制。</p>
+        <p class="weather-disclosure">風況為 Open-Meteo 定位點模型資料；起飛前仍須核對冰島氣象局航空天氣，並遵守機型手冊的抗風限制。海拔優先取自裝置 GPS，若裝置未回報則以 Open-Meteo 地形模型估算，僅供規劃參考，非精確測量值。</p>
       </div>
     </section>
 
@@ -85,6 +94,7 @@
       <p class="section-lead">依 2026 年 8 月實際行程日期判讀。紅色為休閒空拍禁止；橘色須符合時段、區域或取得授權；綠色只代表未發現地點特別禁令，仍須通過官方空域、地主、現場牌示、人群、野生動物與天氣檢查。</p>
       <div class="trip-summary" id="trip-summary" aria-live="polite"></div>
       <div class="trip-filters" id="trip-filters" aria-label="篩選行程景點">
+        <button class="trip-filter today" type="button" data-filter="today" id="today-filter">📅 今日行程</button>
         <button class="trip-filter active" type="button" data-filter="all">全部</button>
         <button class="trip-filter golden" type="button" data-filter="golden">黃金圈</button>
         <button class="trip-filter" type="button" data-filter="blocked">禁止</button>
@@ -203,7 +213,7 @@
   </nav>
 
   <script src="data.js?v=20260726"></script>
-  <script src="drone.js?v=20260726"></script>
+  <script src="drone.js?v=20260729"></script>
 </body>
 
 </html>

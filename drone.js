@@ -128,16 +128,25 @@ let tripSpots = [];
 let activeTripFilter = 'all';
 
 document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
   initMap();
   initTripSpots();
   initCategoryTabs();
   renderPlaces();
   initChecklist();
   initFullscreen();
+  initLocationActions();
   document.getElementById('locate-button').addEventListener('click', locateUser);
   if (window.lucide) window.lucide.createIcons();
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
 });
+
+// 依 2026 年 8 月 1–16 日實際行程日期，換算「今天」是行程第幾天
+function getCurrentTripDay() {
+  const tripStart = new Date(2026, 7, 1);
+  const diffDays = Math.floor((new Date().setHours(0, 0, 0, 0) - tripStart.getTime()) / 86400000) + 1;
+  return diffDays >= 1 && diffDays <= 16 ? diffDays : null;
+}
 
 function initMap() {
   droneMap = L.map('drone-map', { zoomControl: true }).setView([64.95, -18.7], 6);
@@ -242,7 +251,7 @@ function locateUser() {
 }
 
 async function handlePosition(position) {
-  const { latitude, longitude, accuracy } = position.coords;
+  const { latitude, longitude, accuracy, altitude } = position.coords;
   const latlng = [latitude, longitude];
   const locationIcon = L.divIcon({ className: '', html: '<div class="user-location-marker"></div>', iconSize: [18, 18], iconAnchor: [9, 9] });
 
@@ -255,9 +264,20 @@ async function handlePosition(position) {
   droneMap.setView(latlng, Math.max(droneMap.getZoom(), 13));
   document.getElementById('coordinates').textContent = `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
   document.getElementById('gps-accuracy').textContent = Math.round(accuracy);
+  document.getElementById('gmaps-link').href = `https://www.google.com/maps?q=${latitude},${longitude}`;
+  document.getElementById('location-actions').hidden = false;
+
+  const deviceAltitude = Number.isFinite(altitude) ? Math.round(altitude) : null;
+  if (deviceAltitude !== null) renderElevation(deviceAltitude, 'GPS 裝置量測');
 
   evaluateOfficialZones(longitude, latitude);
-  await fetchLocalWind(latitude, longitude);
+  await fetchLocalWind(latitude, longitude, deviceAltitude === null);
+}
+
+function renderElevation(value, source) {
+  const el = document.getElementById('elevation');
+  el.textContent = value;
+  el.title = `海拔來源：${source}`;
 }
 
 function evaluateOfficialZones(longitude, latitude) {
@@ -310,7 +330,7 @@ function ringContainsPoint(ring, longitude, latitude) {
   return inside;
 }
 
-async function fetchLocalWind(latitude, longitude) {
+async function fetchLocalWind(latitude, longitude, needsElevationFallback) {
   const params = new URLSearchParams({
     latitude,
     longitude,
@@ -328,10 +348,64 @@ async function fetchLocalWind(latitude, longitude) {
     document.getElementById('wind-gust').textContent = Number(current.wind_gusts_10m).toFixed(1);
     document.getElementById('wind-direction').textContent = degreesToCompass(current.wind_direction_10m);
     document.getElementById('wind-bearing').textContent = `${Math.round(current.wind_direction_10m)}°`;
-    document.getElementById('weather-time').textContent = `風況 ${formatIcelandTime(current.time)} 更新`;
+    document.getElementById('weather-time').textContent = `${weatherEmoji(current.weather_code)} 風況 ${formatIcelandTime(current.time)} 更新`;
+    renderWindAdvisory(Number(current.wind_gusts_10m));
+    if (needsElevationFallback && Number.isFinite(data.elevation)) {
+      renderElevation(Math.round(data.elevation), 'Open-Meteo 地形模型估算');
+    }
   } catch {
     document.getElementById('weather-time').textContent = '風況載入失敗，請查看冰島氣象局';
+    if (needsElevationFallback) renderElevation('--', '裝置與地形資料皆無法取得');
   }
+}
+
+// 陣風門檻依常見消費級空拍機抗風等級估算，僅供起飛前參考，仍以機型手冊為準
+function renderWindAdvisory(gust) {
+  const el = document.getElementById('wind-advisory');
+  const text = document.getElementById('wind-advisory-text');
+  let level, message;
+  if (gust < 8) {
+    level = 'ok';
+    message = `陣風 ${gust.toFixed(1)} m/s，多數空拍機在此風速下可正常起飛，仍建議留意突風。`;
+  } else if (gust < 12) {
+    level = 'caution';
+    message = `陣風 ${gust.toFixed(1)} m/s，接近輕型機種抗風上限，起飛前請確認機型抗風等級與電量餘裕。`;
+  } else {
+    level = 'restricted';
+    message = `陣風 ${gust.toFixed(1)} m/s，已超出多數消費級空拍機安全範圍，建議暫緩起飛。`;
+  }
+  el.className = `wind-advisory ${level}`;
+  el.hidden = false;
+  text.textContent = message;
+  el.querySelector('i')?.setAttribute('data-lucide', level === 'ok' ? 'circle-check' : level === 'caution' ? 'triangle-alert' : 'octagon-alert');
+  if (window.lucide) window.lucide.createIcons();
+}
+
+function weatherEmoji(code) {
+  if (code === 0) return '☀️';
+  if (code <= 3) return '⛅';
+  if (code <= 48) return '🌫️';
+  if (code <= 67) return '🌧️';
+  if (code <= 77) return '🌨️';
+  if (code <= 82) return '🌦️';
+  if (code <= 86) return '❄️';
+  return '⛈️';
+}
+
+function initLocationActions() {
+  document.getElementById('copy-coords-btn').addEventListener('click', async event => {
+    const coords = document.getElementById('coordinates').textContent;
+    const button = event.currentTarget;
+    try {
+      await navigator.clipboard.writeText(coords);
+      const label = button.lastChild;
+      const original = label.textContent;
+      label.textContent = '已複製';
+      setTimeout(() => { label.textContent = original; }, 1500);
+    } catch {
+      /* 剪貼簿權限不可用時忽略，座標仍可手動選取複製 */
+    }
+  });
 }
 
 function setFlightStatus(type, title, detail) {
@@ -472,6 +546,16 @@ function initTripSpots() {
     document.querySelectorAll('.trip-filter').forEach(item => item.classList.toggle('active', item === button));
     renderTripSpots();
   }));
+
+  const currentDay = getCurrentTripDay();
+  const todayButton = document.getElementById('today-filter');
+  if (currentDay) {
+    todayButton.textContent = `📅 今日 Day ${currentDay}`;
+  } else {
+    todayButton.disabled = true;
+    todayButton.title = '尚未進入行程期間（2026/8/1–8/16）';
+  }
+
   renderTripSpots();
 }
 
@@ -494,6 +578,10 @@ function getTripSpotStatus(spot) {
 function getFilteredTripSpots() {
   if (activeTripFilter === 'all') return tripSpots;
   if (activeTripFilter === 'golden') return tripSpots.filter(spot => spot.baseRule.golden);
+  if (activeTripFilter === 'today') {
+    const currentDay = getCurrentTripDay();
+    return currentDay ? tripSpots.filter(spot => spot.day === currentDay) : tripSpots;
+  }
   return tripSpots.filter(spot => getTripSpotStatus(spot) === activeTripFilter);
 }
 
