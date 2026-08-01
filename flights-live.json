@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-01T06:22:45.691Z",
+  "generatedAt": "2026-08-01T08:38:32.576Z",
   "flights": {
     "CI923": {
       "dep": null,
@@ -12,7 +12,7 @@
         "gate": "",
         "belt": "",
         "status": "已排定",
-        "updated": "08:22"
+        "updated": "10:38"
       }
     },
     "LH844": {
@@ -20,8 +20,8 @@
         "source": "法蘭克福機場",
         "gate": "A16",
         "belt": "",
-        "status": "",
-        "updated": "08:22"
+        "status": "登機中",
+        "updated": "10:38"
       },
       "arr": {
         "source": "KEF 機場",
@@ -38,7 +38,7 @@
         "gate": "",
         "belt": "",
         "status": "已排定",
-        "updated": "08:22"
+        "updated": "10:38"
       }
     },
     "LH796": {
@@ -47,7 +47,7 @@
         "gate": "Z20",
         "belt": "",
         "status": "",
-        "updated": "08:22"
+        "updated": "10:38"
       },
       "arr": null
     },
