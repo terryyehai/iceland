@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-05T04:27:50.753Z",
+  "generatedAt": "2026-08-05T07:15:03.722Z",
   "flights": {
     "CI923": {
       "dep": null,
@@ -24,7 +24,7 @@
         "gate": "",
         "belt": "",
         "status": "已排定",
-        "updated": "06:26"
+        "updated": "09:14"
       }
     },
     "LH844": {
@@ -33,7 +33,7 @@
         "gate": "A",
         "belt": "",
         "status": "",
-        "updated": "06:26"
+        "updated": "09:14"
       },
       "arr": {
         "source": "KEF 機場",
@@ -56,7 +56,7 @@
         "gate": "",
         "belt": "",
         "status": "",
-        "updated": "06:26"
+        "updated": "09:14"
       }
     },
     "LH796": {
@@ -65,7 +65,7 @@
         "gate": "Z15",
         "belt": "",
         "status": "",
-        "updated": "06:26"
+        "updated": "09:14"
       },
       "arr": {
         "source": "香港機場",
